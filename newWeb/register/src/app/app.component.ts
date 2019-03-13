@@ -11,10 +11,19 @@ import { User } from './user';
 export class AppComponent {
   title = 'register';
   streams = ['CSE','IT','ECE','EIE',"EE",'FT','BCA','BBA'];
-  userModel = new User("","","",0);
+  userModel = new User("","","",0,{flawless: false,bughunt: false,cryptoquest: false, webdesign: false});
   users: {};
 
-  constructor(private _enrollment: EnrollmentService) { }
+  constructor(private _enrollment: EnrollmentService) { 
+    console.log('Queried');
+    this._enrollment.fetch().subscribe(
+      data => {
+        console.log('Success', data);
+        this.users = data;
+      },
+      error => console.log('Error', error),
+    );
+   }
 
   onSubmit() {
     console.log(this.userModel);
@@ -31,6 +40,6 @@ export class AppComponent {
         this.users = data;
       },
       error => console.log('Error', error),
-    )
+    );
   }
 }

@@ -5,13 +5,8 @@ const mongoose = require("mongoose");
 const JSAlert = require("js-alert");
 mongoose.Promise = global.Promise;
 t = mongoose.connect("mongodb://localhost:27017/test",{ useNewUrlParser: true });
-var nameSchema = new mongoose.Schema({
-    name: String,
-    college: String,
-    stream: String,
-    contact: Number,
-   });
-var User = mongoose.model("User", nameSchema);
+const scheme = require('./schema/schema');
+var User = mongoose.model("User", scheme.schema);
 console.log(t);
 
 const PORT = 3000;
