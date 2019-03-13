@@ -1,0 +1,92 @@
+
+      <div class="jumbotron jumbotron-fluid">
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Register</button>
+<form (ngSubmit)="onQuery()" novalidate>
+<button type="submit" class="btn btn-primary">Fetch Data</button>
+</form>
+<!-- {{ users | json }} -->
+<!-- Modal -->
+</div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+    <form #userForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+        <div class="modal-body">
+        <!-- {{ userForm.value | json }} -->
+        <hr>
+        <!-- {{ userModel | json }} -->
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Name</span>
+        </div>
+        <input type="text" class="form-control" #name="ngModel" [class.is-invalid]="name.invalid && name.touched" name="userName" [(ngModel)]="userModel.name" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" required>
+        </div>
+        <div class="text-danger"[class.d-none]="!(name.errors && name.touched)">
+        <small class="text-danger" [class.d-none]="!name.invalid">Name is required</small>
+        </div>
+
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon2">College</span>
+        </div>
+        <input type="text" class="form-control" #collegeName="ngModel" [class.is-invalid]="collegeName.invalid && collegeName.touched" name="collegeName" [(ngModel)]="userModel.college" placeholder="College" aria-label="College" aria-describedby="basic-addon2" required>
+        </div>
+        <small class="text-danger" [class.d-none]="!(collegeName.invalid && collegeName.touched)">College Name is required</small>
+
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon3">Stream</span>
+        </div>
+        <select class="form-control" #streamName="ngModel" [class.is-invalid]="streamName.invalid && streamName.touched" name="streamName" [(ngModel)]="userModel.stream" placeholder="Stream" aria-label="Stream" aria-describedby="basic-addon3" required>
+        <option value="" selected>Your stream...</option>
+        <option *ngFor="let stream of streams" value="{{ stream }}">{{ stream }}</option>
+        </select>
+        </div>
+        <small class="text-danger" [class.d-none]="!(streamName.invalid && streamName.touched)">Stream is required</small>
+
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon4">Contact#</span>
+        </div>
+        <input type="text" class="form-control" #contact="ngModel" [class.is-invalid]="contact.invalid && contact.touched" name="contact" pattern="^\d{10}$" [(ngModel)]="userModel.test" placeholder="Contact" aria-label="Contact" aria-describedby="basic-addon4" required>
+        </div>
+        <small class="text-danger" [class.d-none]="!(contact.invalid && contact.touched)">Contact# is required</small>
+        </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    </form>
+</div>
+</div>
+</div>
+
+
+
+<table class="table">
+<thead>
+    <tr>
+    <th scope="col">ID</th>
+    <th scope="col">Name</th>
+    <th scope="col">College</th>
+    <th scope="col">Stream</th>
+    <th scope="col">Age</th>
+    </tr>
+</thead>
+<tbody>
+    <tr *ngFor="let user of users">
+    <td>{{ user._id }}</td>
+    <td>{{ user.name }}</td>
+    <td>{{ user.college }}</td>
+    <td>{{ user.stream }}</td>
+    <td>{{ user.test }}</td>
+    </tr>
+</tbody>
+</table>
