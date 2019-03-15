@@ -1,0 +1,83 @@
+<!-- <a routerLink="../">Back</a>
+<h3>Webdesign Participants</h3>
+<table class="table table-bordered table-striped table-sm">
+    <thead class="thead-dark">
+        <tr>
+        <th style="vertical-align: middle; text-align: center;" scope="col">ID</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">Name</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">College</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+        <td style="vertical-align: middle; text-align: center;">{{ user.events.webdesign == true ? user._id : "" }}</td>
+        <td style="vertical-align: middle; text-align: center;">{{ user.events.webdesign == true ? user.name : "" }}</td>
+        <td style="vertical-align: middle; text-align: center;">{{ user.events.webdesign == true ? user.college : "" }}</td>
+        </tr>
+    </tbody>
+    </table> -->
+
+<a routerLink="../">Back</a>
+<h3>Registered Participants for Webdesign</h3>
+<form #flawless="ngForm" (ngSubmit)="onSubmit()" novalidate>
+<table class="table table-bordered table-striped table-sm">
+    <thead class="thead-dark">
+        <tr>
+        <th style="vertical-align: middle; text-align: center;" scope="col">Select</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">ID</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">Name</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">College</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of actualusers; let i=index;">
+        <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.webdesign == true">
+        <input type="checkbox" id="exampleCheck{{i}}" placeholder="FlawTeam" aria-label="FlawTeam" data-md-icheck (change)="checkTeam($event,i)"></td>
+        <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.webdesign == true">{{ user._id }}</td>
+        <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.webdesign == true">{{ user.name }}</td>
+        <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.webdesign == true">{{ user.college }}</td>
+        </tr>
+    </tbody>
+    </table>
+    <h5 class="text-info">The ones who already formed team will not be shown above.</h5>
+    <div class="input-group mb-3">
+    <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">Team Name</span>
+    </div>
+    <input type="text" class="form-control" #name="ngModel" [class.is-invalid]="name.invalid && name.touched" name="teamName" [(ngModel)]="userModel.name" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" required>
+    </div>
+    <div class="text-danger"[class.d-none]="!(name.errors && name.touched)">
+    <small class="text-danger" [class.d-none]="!name.invalid">Team Name is required</small>
+    </div>
+    
+    <div class="input-group mb-3">
+    <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon2">Password</span>
+    </div>
+    <input type="password" class="form-control" #password="ngModel" [class.is-invalid]="password.invalid && password.touched" name="password" [(ngModel)]="userModel.password" placeholder="Pass" aria-label="Pass" aria-describedby="basic-addon2" required>
+    </div>
+    <div class="text-danger"[class.d-none]="!(password.errors && password.touched)">
+    <small class="text-danger" [class.d-none]="!password.invalid">Password is required</small>
+    </div>
+    <button class="btn btn-primary" type="submit" [disabled]="!done || flawless.form.invalid">Confirm Team</button>
+</form>
+    <!-- #webdesign="ngModel" name="webdesign" [(ngModel)]="userModel.events.webdesign" -->
+    
+<h3>Webdesign Teams</h3>
+<table class="table table-bordered table-striped table-sm">
+    <thead class="thead-dark">
+        <tr>
+        <th style="vertical-align: middle; text-align: center;" scope="col">ID</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">Teamname</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col" colspan="2">Members</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let team of teams;">
+        <td style="vertical-align: middle; text-align: center;">{{ team._id }}</td>
+        <td style="vertical-align: middle; text-align: center;">{{ team.name }}</td>
+        <td style="vertical-align: middle; text-align: center;">{{ team.members.mem1 }}</td>
+        <td style="vertical-align: middle; text-align: center;">{{ team.members.mem2 }}</td>
+        </tr>
+    </tbody>
+    </table>

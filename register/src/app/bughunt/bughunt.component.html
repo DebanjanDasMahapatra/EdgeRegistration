@@ -1,0 +1,18 @@
+<a routerLink="../">Back</a>
+<h3>Bughunt Participants</h3>
+<table class="table table-bordered table-striped table-sm">
+    <thead class="thead-dark">
+        <tr>
+        <th style="vertical-align: middle; text-align: center;" scope="col">ID</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">Name</th>
+        <th style="vertical-align: middle; text-align: center;" scope="col">College</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+        <td style="vertical-align: middle; text-align: center;">{{ user.events.bughunt == true ? user._id : "" }}</td>
+        <td style="vertical-align: middle; text-align: center;">{{ user.events.bughunt == true ? user.name : "" }}</td>
+        <td style="vertical-align: middle; text-align: center;">{{ user.events.bughunt == true ? user.college : "" }}</td>
+        </tr>
+    </tbody>
+    </table>
