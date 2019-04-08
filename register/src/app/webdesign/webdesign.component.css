@@ -1,0 +1,3 @@
+.cell-hover:hover { background: yellow; }
+.select-cell { background: grey; }
+.selected-cell { color: lime; }

@@ -1,65 +1,89 @@
-<a routerLink="../">Back</a>
-<h3>Registered Participants for Flawless</h3>
-<form #flawless="ngForm" (ngSubmit)="onSubmit()" novalidate>
-<table class="table table-bordered table-striped table-sm">
-  <thead class="thead-dark">
+<div class="container">
+  <h3 class="text-center text-label" style="margin-top:50px;">Registered Participants for Flawless</h3>
+  <div style="text-align: left; margin-top:50px;">
+    <ol class="display: inline; text-label">
+      <li>You can select Maximum {{teamsize}} members for a team. </li>
+      <li>Click the select column for each row to select / deselect member(s).</li>
+    </ol>
+  </div>
+  <form #flawless="ngForm" (ngSubmit)="onSubmit($event)" novalidate>
+    <table class="table table-bordered table-sm text-label" [class.table-hover]="empty != -1">
+      <thead>
+        <tr>
+          <th scope="col">Select</th>
+          <th scope="col">Name</th>
+          <th scope="col">RC ID</th>
+          <th scope="col">College</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of actualusers; let i=index;" (click)="goWork(i)" class="text-label">
+          <td (click)="checkTeam(i)"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
+          </td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.rcid }}</td>
+          <td>{{ user.college }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h5 class="text-secondary">The participants who already formed team will not be shown above.</h5>
+    <small *ngIf="actualusers.length == 0" class="text-danger">It seems that all registered participants have already
+      formed teams !!! Please wait for more registrations !!!</small>
+    <div *ngIf="actualusers.length != 0">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">A Short Team Name</span>
+        </div>
+        <input type="text" class="form-control" #name="ngModel" [class.is-invalid]="name.invalid && name.touched"
+          name="teamName" [(ngModel)]="userModel.name" placeholder="Team Name (Max 15 Characters)" maxlength="15"
+          aria-label="Name" aria-describedby="basic-addon1" required>
+      </div>
+      <div class="text-danger" [class.d-none]="!(name.errors && name.touched)">
+        <small class="text-danger" [class.d-none]="!name.invalid">Team Name is required</small>
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!done || flawless.form.invalid">Confirm Team</button>
+    </div>
+  </form>
+
+  <h5>Search Team:</h5><input [(ngModel)]="searchText" placeholder="Search.." class="form-control">
+  <h3 class="text-label">Flawless Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found
+      !!!)</small></h3>
+  <table class="table table-bordered table-sm text-label" #fteams>
+    <thead>
       <tr>
-      <th style="vertical-align: middle; text-align: center;" scope="col">Select</th>
-      <th style="vertical-align: middle; text-align: center;" scope="col">ID</th>
-      <th style="vertical-align: middle; text-align: center;" scope="col">Name</th>
-      <th style="vertical-align: middle; text-align: center;" scope="col">College</th>
+        <th scope="col">Team#</th>
+        <th scope="col">Team Name</th>
+        <th scope="col" colspan="3">Member(s)</th>
+        <th scope="col" colspan="3">Action</th>
       </tr>
-  </thead>
-  <tbody>
-      <tr *ngFor="let user of actualusers; let i=index;">
-      <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.flawless == true">
-        <input type="checkbox" id="exampleCheck{{i}}" placeholder="FlawTeam" aria-label="FlawTeam" data-md-icheck (change)="checkTeam($event,i)"></td>
-      <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.flawless == true">{{ user._id }}</td>
-      <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.flawless == true">{{ user.name }}</td>
-      <td style="vertical-align: middle; text-align: center;" *ngIf="user.events.flawless == true">{{ user.college }}</td>
+    </thead>
+    <tbody>
+      <tr *ngFor="let team of teams | search: {name: searchText}; let i=index;">
+        <td>{{ i+1 }}</td>
+        <td>{{ team.name }}</td>
+        <td (click)="delMember(i,'mem1')" [class.cell-hover]="empty == i && type != 'a'">{{ team.members.mem1 }}
+          <a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+          title="Member Info" [attr.data-content]="info" (mouseover)="infoDisplay(team.members.mem1.split('_')[1])"><i class="material-icons">&#xe88e;</i></a></td>
+        <td (click)="delMember(i,'mem2')" [class.cell-hover]="empty == i && type != 'a'">{{ team.members.mem2 }}
+          <a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+          title="Member Info" [attr.data-content]="info" (mouseover)="infoDisplay(team.members.mem2.split('_')[1])"><i class="material-icons">&#xe88e;</i></a></td>
+        <td (click)="delMember(i,'mem3')" [class.cell-hover]="empty == i && type != 'a'">{{ team.members.mem3 }}
+          
+          <a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+          title="Member Info" [attr.data-content]="info" (mouseover)="infoDisplay(team.members.mem3.split('_')[1])"><i class="material-icons">&#xe88e;</i></a></td>
+        
+          <td><button class="btn btn-warning btn-sm" *ngIf="team.members.mem3 == '' && actualusers.length > 0"
+            (click)="type = 'a'; empty = i;"><i class="material-icons">&#xe7fe;</i></button></td>
+        <td><button class="btn btn-danger btn-sm" *ngIf="team.members.mem2 != ''" (click)="empty = i;"><i
+              class="material-icons">person_add_disabled</i></button></td>
+        <td><button class="btn btn-danger btn-sm" (click)="delTeam(i)"><i class="material-icons">&#xe872;</i></button>
+        </td>
       </tr>
-  </tbody>
+    </tbody>
   </table>
-  <h5 class="text-info">The ones who already formed team will not be shown above.</h5>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">Team Name</span>
-    </div>
-    <input type="text" class="form-control" #name="ngModel" [class.is-invalid]="name.invalid && name.touched" name="teamName" [(ngModel)]="userModel.name" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" required>
-    </div>
-    <div class="text-danger"[class.d-none]="!(name.errors && name.touched)">
-    <small class="text-danger" [class.d-none]="!name.invalid">Team Name is required</small>
-    </div>
-    
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon2">Password</span>
-    </div>
-    <input type="password" class="form-control" #password="ngModel" [class.is-invalid]="password.invalid && password.touched" name="password" [(ngModel)]="userModel.password" placeholder="Pass" aria-label="Pass" aria-describedby="basic-addon2" required>
-    </div>
-    <div class="text-danger"[class.d-none]="!(password.errors && password.touched)">
-    <small class="text-danger" [class.d-none]="!password.invalid">Password is required</small>
-    </div>
-  <button class="btn btn-primary" type="submit" [disabled]="!done || flawless.form.invalid">Confirm Team</button>
-</form>
-  <!-- #webdesign="ngModel" name="webdesign" [(ngModel)]="userModel.events.webdesign" -->
-  
-<h3>Flawless Teams</h3>
-<table class="table table-bordered table-striped table-sm">
-  <thead class="thead-dark">
-      <tr>
-      <th style="vertical-align: middle; text-align: center;" scope="col">ID</th>
-      <th style="vertical-align: middle; text-align: center;" scope="col">Teamname</th>
-      <th style="vertical-align: middle; text-align: center;" scope="col" colspan="3">Members</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr *ngFor="let team of teams;">
-      <td style="vertical-align: middle; text-align: center;">{{ team._id }}</td>
-      <td style="vertical-align: middle; text-align: center;">{{ team.name }}</td>
-      <td style="vertical-align: middle; text-align: center;">{{ team.members.mem1 }}</td>
-      <td style="vertical-align: middle; text-align: center;">{{ team.members.mem2 }}</td>
-      <td style="vertical-align: middle; text-align: center;">{{ team.members.mem3 }}</td>
-      </tr>
-  </tbody>
-  </table>
+  <button class="btn btn-primary" (click)="ExportToExcel('Flawless')" *ngIf="teamNum > 0"><i
+      class="material-icons">&#xe2c4;</i>Team Chart xlsx</button>
+  <div class="wrapper" style="text-align: center">
+    <button class="btn btn-success" (click)="this._location.back()">Back</button>
+  </div>
+</div>

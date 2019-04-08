@@ -1,6 +1,5 @@
-.tick { color: green; }
 .bg-image {
-    background-image: url("../../assets/coverBlur.jpg");
+    background-image: url("../../assets/reg_bck.jpg");
     height: 150%;
     background-position: center;
     background-repeat: no-repeat;

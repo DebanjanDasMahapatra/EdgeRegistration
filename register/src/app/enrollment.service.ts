@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { Flawless } from './flawless';
+import { Bughunt } from './bughunt';
 import { Cryptoquest } from './cryptoquest';
 import { Webdesign } from './webdesign';
 
@@ -9,53 +10,112 @@ import { Webdesign } from './webdesign';
   providedIn: 'root'
 })
 export class EnrollmentService {
-  _url1 = 'http://localhost:3000/enroll';
-  _url2 = 'http://localhost:3000/fetch';
-  _url3 = 'http://localhost:3000/fetchFlawless';
-  _url4 = 'http://localhost:3000/fetchBughunt';
-  _url5 = 'http://localhost:3000/fetchCryptoquest';
-  _url6 = 'http://localhost:3000/fetchWebdesign';
-  _url7 = 'http://localhost:3000/teamFlawless';
-  _url8 = 'http://localhost:3000/fetchFlawlessTeam';
-  _url9 = 'http://localhost:3000/teamCryptoquest';
-  _url10 = 'http://localhost:3000/fetchCryptoquestTeam';
-  _url11 = 'http://localhost:3000/teamWebdesign';
-  _url12 = 'http://localhost:3000/fetchWebdesignTeam';
+  addFlaw(chal: { }): any {
+    throw new Error("Method not implemented.");
+  }
+  _urlF = '/flawless';
+  _urlB = '/bughunt';
+  _urlC = '/cryptoquest';
+  _urlW = '/webdesign';
+  _urlR = '/user';
+  _url = 'http://localhost';
+
   constructor(private _http: HttpClient) { }
+
+    //Registration URLs
     enroll(user: User) {
-      return this._http.post<any>(this._url1,user);
+      return this._http.post<any>(this._url+this._urlR+'/enroll',user);
     }
-    teamUpFlawless(team: Flawless) {
-      return this._http.post<any>(this._url7,team);
+    change(user: User, flag: string) {
+      return this._http.post<any>(this._url+this._urlR+'/change',{prev: user,id: flag});
     }
-    teamUpCryptoquest(team: Cryptoquest) {
-      return this._http.post<any>(this._url9,team);
-    }
-    teamUpWebdesign(team: Webdesign) {
-      return this._http.post<any>(this._url11,team);
+    deleteUser(flag: string) {
+      return this._http.post<any>(this._url+this._urlR+'/delete',{id: flag});
     }
     fetch() {
-      return this._http.get<any>(this._url2);
+      return this._http.get<any>(this._url+this._urlR+'/fetch');
+    }
+    evaluate(arg0: { c: string; l: string; }) {
+      return this._http.post<any>(this._url+'/execute',arg0);
+    }
+
+    //Flawless URLs
+    teamUpFlawless(team: Flawless) {
+      return this._http.post<any>(this._url+this._urlF+'/addTeam',team);
+    }
+    addMemberFlawless(val: {}) {
+      return this._http.post<any>(this._url+this._urlF+'/addTeamMem',val);
+    }
+    delMemberFlawless(val: {}) {
+      return this._http.post<any>(this._url+this._urlF+'/delTeamMem',val);
+    }
+    delTeamFlawless(val: {}) {
+      return this._http.post<any>(this._url+this._urlF+'/delTeam',val);
     }
     fetchFlawless() {
-      return this._http.get<any>(this._url3);
+      return this._http.get<any>(this._url+this._urlF+'/getEligibles');
     }
     fetchFlawlessTeam() {
-      return this._http.get<any>(this._url8);
+      return this._http.get<any>(this._url+this._urlF+'/getTeams');
+    }
+
+    //Bughunt URLs
+    teamUpBughunt(team: Bughunt) {
+      return this._http.post<any>(this._url+this._urlB+'/addTeam',team);
+    }
+    addMemberBughunt(val: {}) {
+      return this._http.post<any>(this._url+this._urlB+'/addTeamMem',val);
+    }
+    delMemberBughunt(val: {}) {
+      return this._http.post<any>(this._url+this._urlB+'/delTeamMem',val);
+    }
+    delTeamBughunt(val: {}) {
+      return this._http.post<any>(this._url+this._urlB+'/delTeam',val);
     }
     fetchBughunt() {
-      return this._http.get<any>(this._url4);
+      return this._http.get<any>(this._url+this._urlB+'/getEligibles');
+    }
+    fetchBughuntTeam() {
+      return this._http.get<any>(this._url+this._urlB+'/getTeams');
+    }
+
+    //Cryptoquest URLs
+    teamUpCryptoquest(team: Cryptoquest) {
+      return this._http.post<any>(this._url+this._urlC+'/addTeam',team);
+    }
+    addMemberCryptoquest(val: {}) {
+      return this._http.post<any>(this._url+this._urlC+'/addTeamMem',val);
+    }
+    delMemberCryptoquest(val: {}) {
+      return this._http.post<any>(this._url+this._urlC+'/delTeamMem',val);
+    }
+    delTeamCryptoquest(val: {}) {
+      return this._http.post<any>(this._url+this._urlC+'/delTeam',val);
     }
     fetchCryptoquest() {
-      return this._http.get<any>(this._url5);
+      return this._http.get<any>(this._url+this._urlC+'/getEligibles');
     }
     fetchCryptoquestTeam() {
-      return this._http.get<any>(this._url10);
+      return this._http.get<any>(this._url+this._urlC+'/getTeams');
+    }
+
+    //Webdesign URLs
+    teamUpWebdesign(team: Webdesign) {
+      return this._http.post<any>(this._url+this._urlW+'/addTeam',team);
+    }
+    addMemberWebdesign(val: {}) {
+      return this._http.post<any>(this._url+this._urlW+'/addTeamMem',val);
+    }
+    delMemberWebdesign(val: {}) {
+      return this._http.post<any>(this._url+this._urlW+'/delTeamMem',val);
+    }
+    delTeamWebdesign(val: {}) {
+      return this._http.post<any>(this._url+this._urlW+'/delTeam',val);
     }
     fetchWebdesign() {
-      return this._http.get<any>(this._url6);
+      return this._http.get<any>(this._url+this._urlW+'/getEligibles');
     }
     fetchWebdesignTeam() {
-      return this._http.get<any>(this._url12);
+      return this._http.get<any>(this._url+this._urlW+'/getTeams');
     }
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'register';
-
   constructor() { }
+
+  ExportToExcel(name: string, table: ElementRef, sheet: string)
+  {
+    const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, sheet);
+    XLSX.writeFile(wb, name+'.xlsx');
+  }
 }

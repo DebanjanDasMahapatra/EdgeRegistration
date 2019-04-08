@@ -1,18 +1,83 @@
-<a routerLink="../">Back</a>
-<h3>Bughunt Participants</h3>
-<table class="table table-bordered table-striped table-sm">
-    <thead class="thead-dark">
+<div class="container">
+  <h3 class="text-center">Registered Participants for Bughunt</h3>
+  <div style="text-align: left;">
+    <ol class="display: inline;">
+      <li>You can select Maximum {{teamsize}} members for a team. </li>
+      <li>Click the select column for each row to select / deselect member(s).</li>
+      <li>Remember your credentials (Team name and Password).</li>
+      <li>Use it to log in into the Bughunt Contest Site.</li>
+    </ol>
+  </div>
+  <form #bughunt="ngForm" (ngSubmit)="onSubmit($event)" novalidate>
+    <table class="table table-bordered table-sm" [class.table-hover]="empty != -1">
+      <thead>
         <tr>
-        <th style="vertical-align: middle; text-align: center;" scope="col">ID</th>
-        <th style="vertical-align: middle; text-align: center;" scope="col">Name</th>
-        <th style="vertical-align: middle; text-align: center;" scope="col">College</th>
+          <th scope="col">Select</th>
+          <th scope="col">Name</th>
+          <th scope="col">RC ID</th>
+          <th scope="col">College</th>
         </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of actualusers; let i=index;" (click)="goWork(i)">
+          <td (click)="checkTeam(i)"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
+          </td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.rcid }}</td>
+          <td>{{ user.college }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h5 class="text-secondary">The participants who already formed team will not be shown above.</h5>
+    <div *ngIf="actualusers.length != 0">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">A Short Team Name</span>
+        </div>
+        <input type="text" class="form-control" #name="ngModel" [class.is-invalid]="name.invalid && name.touched"
+          name="teamName" [(ngModel)]="userModel.name" placeholder="Team Name (Max 15 Characters)" maxlength="15"
+          aria-label="Name" aria-describedby="basic-addon1" required>
+      </div>
+      <div class="text-danger" [class.d-none]="!(name.errors && name.touched)">
+        <small class="text-danger" [class.d-none]="!name.invalid">Team Name is required</small>
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!done || bughunt.form.invalid">Confirm Team</button>
+    </div>
+  </form>
+
+  <h5>Search Team:</h5><input [(ngModel)]="searchText" placeholder="Search.." class="form-control">
+  <h3>Bughunt Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found !!!)</small></h3>
+  <table class="table table-bordered table-sm" #bteams>
+    <thead>
+      <tr>
+        <th scope="col">Team#</th>
+        <th scope="col">Team Name</th>
+        <th scope="col" colspan="2">Member(s)</th>
+        <th scope="col" colspan="3">Action</th>
+      </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let user of users">
-        <td style="vertical-align: middle; text-align: center;">{{ user.events.bughunt == true ? user._id : "" }}</td>
-        <td style="vertical-align: middle; text-align: center;">{{ user.events.bughunt == true ? user.name : "" }}</td>
-        <td style="vertical-align: middle; text-align: center;">{{ user.events.bughunt == true ? user.college : "" }}</td>
-        </tr>
+      <tr *ngFor="let team of teams | search: {name: searchText}; let i=index;">
+        <td>{{ i+1 }}</td>
+        <td>{{ team.name }}</td>
+        <td (click)="delMember(i,'mem1')" [class.cell-hover]="empty == i && type != 'a'">{{ team.members.mem1 }}
+            <a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+            title="Member Info" [attr.data-content]="info" (mouseover)="infoDisplay(team.members.mem1.split('_')[1])"><i class="material-icons">&#xe88e;</i></a></td>
+        <td (click)="delMember(i,'mem2')" [class.cell-hover]="empty == i && type != 'a'">{{ team.members.mem2 }}
+            <a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+            title="Member Info" [attr.data-content]="info" (mouseover)="infoDisplay(team.members.mem2.split('_')[1])"><i class="material-icons">&#xe88e;</i></a></td>
+        <td><button class="btn btn-warning btn-sm" *ngIf="team.members.mem2 == '' && actualusers.length > 0"
+            (click)="type = 'a'; empty = i;"><i class="material-icons">&#xe7fe;</i></button></td>
+        <td><button class="btn btn-danger btn-sm" *ngIf="team.members.mem2 != ''" (click)="empty = i;"><i
+              class="material-icons">person_add_disabled</i></button></td>
+        <td><button class="btn btn-danger btn-sm" (click)="delTeam(i)"><i class="material-icons">&#xe872;</i></button>
+        </td>
+      </tr>
     </tbody>
-    </table>
+  </table>
+  <button class="btn btn-primary" (click)="ExportToExcel('Bughunt')" *ngIf="teamNum > 0"><i
+      class="material-icons">&#xe2c4;</i>Team Chart xlsx</button>
+  <div class="wrapper" style="text-align: center">
+    <button class="btn btn-success" (click)="this._location.back()">Back</button>
+  </div>
+</div>

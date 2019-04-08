@@ -1,0 +1,9 @@
+.table thead th { vertical-align: middle; text-align: center; }
+.table tbody td { vertical-align: middle; text-align: center; }
+.material-icons { vertical-align: middle; }
+.form-control {
+  background: transparent;
+  color: black;
+}
+.text-label { color: black; }
+::placeholder { color: black; }
