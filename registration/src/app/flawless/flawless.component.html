@@ -1,6 +1,7 @@
 <ng-progress #progBar thick="true"></ng-progress>
 <div class="container">
   <h3 class="text-center text-label" style="margin-top:50px;">Registered Participants for Flawless</h3>
+  <button mat-raised-button (click)="onQuery(false)" class="float-right"><mat-icon>refresh</mat-icon> Refresh</button>
   <div style="text-align: left; margin-top:50px;">
     <ol class="display: inline; text-label">
       <li>You can select Maximum {{teamsize}} members for a team. </li>
@@ -19,7 +20,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of actualusers; let i=index;" (click)="goWork(i)" class="text-label">
-          <td (click)="checkTeam(i)" style="cursor: pointer"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
+          <td *ngIf="_appcomp.loggedIn" (click)="checkTeam(i)" style="cursor: pointer"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
+          </td>
+          <td *ngIf="!_appcomp.loggedIn" style="cursor: no-drop"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
           </td>
           <td>{{ user.name }}</td>
           <td>{{ user.rcid }}</td>

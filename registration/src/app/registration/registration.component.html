@@ -1,6 +1,7 @@
 <ng-progress #progBar thick="true"></ng-progress>
 <div class="container">
   <h3 class="text-center text-label" style="margin-top: 50px; margin-bottom: 50px">All Registrations
+    <button mat-raised-button (click)="onQuery(false)" class="float-right"><mat-icon>refresh</mat-icon> Refresh</button>
   </h3>
   <small *ngIf="!_appcomp.loggedIn" class="text-primary text-center">Please Login to Register Participants</small>
   <div class="row">

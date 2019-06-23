@@ -1,6 +1,7 @@
 <ng-progress #progBar thick="true"></ng-progress>
 <div class="container">
   <h3 class="text-center text-label" style="margin-top:50px;">Registered Participants for Webdesign</h3>
+  <button mat-raised-button (click)="onQuery(false)" class="float-right"><mat-icon>refresh</mat-icon> Refresh</button>
   <div style="text-align: left; margin-top:50px;">
     <ol class="display: inline;">
       <li>You can select Maximum {{teamsize}} members for a team. </li>

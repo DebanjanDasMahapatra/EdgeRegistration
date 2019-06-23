@@ -15,8 +15,7 @@ export class EnrollmentService {
   _urlC = '/cryptoquest';
   _urlW = '/webdesign';
   _urlR = '/user';
-  _url = 'http://10.10.101.187';
-  //_url = 'https://da433088.ngrok.io';
+  _url = 'http://localhost';
 
   constructor(private _http: HttpClient) { }
 

@@ -24,7 +24,7 @@ export class RegisterDialogComponent implements OnInit {
     console.log('Queried');
     this._enrollment.fetch().subscribe(
       data => {
-        this.users = data;
+        this.users = data.data;
       },
       error => console.log('Error', error),
     );

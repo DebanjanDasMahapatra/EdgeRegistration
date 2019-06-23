@@ -38,6 +38,8 @@ export class RegistrationComponent implements OnInit {
   userModel = new User("", "", "", "", 0, "", "", { flawless: false, bughunt: false, cryptoquest: false, webdesign: false });
   userNew = new User("", "", "", "", 0, "", "", { flawless: false, bughunt: false, cryptoquest: false, webdesign: false });
   users;
+  databaseError = 'Please Check Your DataBase connectivity. If you are using MongoDB at localhost, make sure it is turned on. If you are using online MongoDB server, check your internet connection.';
+  serverError = 'Some Internal Server Error Occured !!! Please check the server connection';
   flag: string = '';
   dataSource = new MatTableDataSource<PeriodicElement>(this.users);
   elementData: PeriodicElement[];
@@ -82,21 +84,33 @@ export class RegistrationComponent implements OnInit {
     if (!type)
       this._enrollment.enroll(this.userModel).subscribe(
         data => {
-          this.openSnackBar('Participant Registered Successfully !!!','OK');
+          if(data.status) {
+            this.openSnackBar('Participant Registered Successfully !!!','OK');
+          }
+          else {
+            this.openSnackBar('Participant Registration Failure !!! '+this.databaseError,'OK');
+          }
           this.onQuery(false);
         },
         error => {
-          this.openSnackBar('Oops !!! Some Problem Occured !!!','OK');
-        },
+          this.openSnackBar(this.serverError,'OK');
+          console.log(error);
+        }
       );
     else
       this._enrollment.change(this.userModel, this.flag).subscribe(
         data => {
-          this.openSnackBar('Participant Data Edited Successfully !!!','OK');
+          if(data.status) {
+            this.openSnackBar('Participant Data Edited Successfully !!!','OK');
+          }
+          else {
+            this.openSnackBar('Participant Data Editing Failure !!! '+this.databaseError,'OK');
+          }
           this.onQuery(false);
         },
         error => {
-          this.openSnackBar('Oops !!! Some Problem Occured !!!','OK');
+          this.openSnackBar(this.serverError,'OK');
+          console.log(error);
         }
       );
     this.userModel = this.userNew;
@@ -118,14 +132,25 @@ export class RegistrationComponent implements OnInit {
 
   onDelete() {
     if (confirm('Sure to Delete ? If you delete, any of the team(s) for any event(s) having this participant as member (if any) will be also be deleted !!!')) {
+      this.startPB();
       this.del = true;
       this._enrollment.deleteUser(this.flag).subscribe(
         data => {
-          this.openSnackBar('Participant Deleted Successfully !!!','OK');
-          this.startPB();
+          if(data.status) {
+            this.openSnackBar('Participant Deleted Successfully !!!','OK');
+            this.endPB();
+          }
+          else {
+            this.openSnackBar('Participant Deletion Failure !!! '+this.databaseError,'OK');
+            this.endPB();
+          }
           this.onQuery(false);
         },
-        error => this.openSnackBar('Oops !!! Some Problem Occured !!!','OK'),
+        error => {
+          this.openSnackBar(this.serverError,'OK');
+          this.endPB();
+          console.log(error);
+        }
       );
     }
   }
@@ -136,14 +161,26 @@ export class RegistrationComponent implements OnInit {
     this.flag = '';
     this._enrollment.fetch().subscribe(
       data => {
-        this.users = data;
-        this.elementData = this.users;
-        this.dataSource = new MatTableDataSource(this.elementData);
-        this.sortByKey(this.users, "name");
+        if(data.status) {
+          this.openSnackBar('Users Retrieved Successfully !!!','OK');
+          this.users = data.data;
+          this.elementData = this.users;
+          this.dataSource = new MatTableDataSource(this.elementData);
+          this.sortByKey(this.users, "name");
+        }
+        else {
+          this.openSnackBar('Users Retrieval Failure !!! '+this.databaseError,'OK');
+          console.log(data.data);
+        }
         if(!start)
           this.endPB();
       },
-      error => console.log('Error', error),
+      error => {
+        this.openSnackBar(this.serverError,'OK');
+        console.log(error);
+        if(!start)
+          this.endPB();
+      }
     );
   }
 
