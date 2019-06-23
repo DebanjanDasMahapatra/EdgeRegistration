@@ -26,10 +26,15 @@
           </li>
         </ul>
       </div>
-    <mat-form-field class="float-right" *ngIf="!_appcomp.loggedIn" style="margin-right: 3%">
+    <mat-form-field class="float-right" *ngIf="!_appcomp.loggedIn" style="margin-right: 2%">
         <input matInput [(ngModel)]="password" placeholder="Admin Password">
     </mat-form-field>
-    <button mat-raised-button (click)="login()" *ngIf="!_appcomp.loggedIn">Login</button>
-    <button mat-raised-button class="float-right" (click)="logout()" *ngIf="_appcomp.loggedIn">Logout</button>
+    <button mat-raised-button (click)="login()" *ngIf="!_appcomp.loggedIn" style="margin-right: 2%">Login</button>
+    <button mat-raised-button class="float-right" (click)="logout()" *ngIf="_appcomp.loggedIn" style="margin-right: 2%">Logout</button>
+    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
   </div>
 </nav>
+
+<mat-menu #menu="matMenu">
+    <mat-slide-toggle [(ngModel)]="_appcomp.receiveConfirmationMessages" style="font-size: 15px; padding-left: 10px; padding-right: 10px;" labelPosition="before" color="primary">Confirmation Messages </mat-slide-toggle>
+</mat-menu>

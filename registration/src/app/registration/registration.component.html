@@ -1,11 +1,14 @@
 <ng-progress #progBar thick="true"></ng-progress>
 <div class="container">
   <h3 class="text-center text-label" style="margin-top: 50px; margin-bottom: 50px">All Registrations
-    <button mat-raised-button (click)="onQuery(false)" class="float-right"><mat-icon>refresh</mat-icon> Refresh</button>
+    <button mat-raised-button (click)="onQuery(false)" class="float-right">
+      <mat-icon>refresh</mat-icon> Refresh
+    </button>
   </h3>
   <small *ngIf="!_appcomp.loggedIn" class="text-primary text-center">Please Login to Register Participants</small>
   <div class="row">
-    <div class="col-3"><button mat-raised-button color="accent" (click)="openRegisterDialog(false)" [disabled]="!_appcomp.loggedIn">Register New
+    <div class="col-3"><button mat-raised-button color="accent" (click)="openRegisterDialog(false)"
+        [disabled]="!_appcomp.loggedIn">Register New
         Participant</button></div>
     <div class="col-6">
       <mat-form-field class="float-center" style="width: 100%">

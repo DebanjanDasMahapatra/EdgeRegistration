@@ -57,9 +57,10 @@ export class WebdesignComponent implements OnInit {
   }
 
   openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 3000,
-    });
+    if (this._appcomp.receiveConfirmationMessages)
+      this.snackBar.open(message, action, {
+        duration: 3000,
+      });
   }
 
   checkExistance(v: string) {

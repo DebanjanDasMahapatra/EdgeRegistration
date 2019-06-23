@@ -57,11 +57,12 @@ export class CryptoquestComponent implements OnInit {
   }
 
   openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 3000,
-    });
+    if (this._appcomp.receiveConfirmationMessages)
+      this.snackBar.open(message, action, {
+        duration: 3000,
+      });
   }
-
+  
   checkExistance(v: string) {
     for (let k = 0; k < this.teamNum; k++) {
       if (v == this.teams[k].members.mem1 || v == this.teams[k].members.mem2)

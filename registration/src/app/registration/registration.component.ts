@@ -31,7 +31,7 @@ export interface PeriodicElement {
 })
 export class RegistrationComponent implements OnInit {
 
-  displayedColumns: string[] = ['1','2','3','4','5','6','7','8','9','10','11','12','13'];
+  displayedColumns: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'];
   streams = ['CSE', 'IT', 'ECE', 'EIE', "EE", 'FT', 'BCA', 'MCA', 'CIVIL', 'ME', 'Others'];
   @ViewChild(NgProgressComponent) progBar: NgProgressComponent;
   @ViewChild('allusers') table: ElementRef;
@@ -66,16 +66,16 @@ export class RegistrationComponent implements OnInit {
     const dialogRef = this.dialog.open(RegisterDialogComponent, {
       width: '600px',
       hasBackdrop: false,
-      data: {userModel: this.userModel, editing: work}        
+      data: { userModel: this.userModel, editing: work }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.userModel = result;
-      if(result.name) {
+      if (result.name) {
         this.startPB();
         this.onSubmit(work);
       }
-        else
+      else
         this.flag = '';
     });
   }
@@ -84,32 +84,32 @@ export class RegistrationComponent implements OnInit {
     if (!type)
       this._enrollment.enroll(this.userModel).subscribe(
         data => {
-          if(data.status) {
-            this.openSnackBar('Participant Registered Successfully !!!','OK');
+          if (data.status) {
+            this.openSnackBar('Participant Registered Successfully !!!', 'OK');
           }
           else {
-            this.openSnackBar('Participant Registration Failure !!! '+this.databaseError,'OK');
+            this.openSnackBar('Participant Registration Failure !!! ' + this.databaseError, 'OK');
           }
           this.onQuery(false);
         },
         error => {
-          this.openSnackBar(this.serverError,'OK');
+          this.openSnackBar(this.serverError, 'OK');
           console.log(error);
         }
       );
     else
       this._enrollment.change(this.userModel, this.flag).subscribe(
         data => {
-          if(data.status) {
-            this.openSnackBar('Participant Data Edited Successfully !!!','OK');
+          if (data.status) {
+            this.openSnackBar('Participant Data Edited Successfully !!!', 'OK');
           }
           else {
-            this.openSnackBar('Participant Data Editing Failure !!! '+this.databaseError,'OK');
+            this.openSnackBar('Participant Data Editing Failure !!! ' + this.databaseError, 'OK');
           }
           this.onQuery(false);
         },
         error => {
-          this.openSnackBar(this.serverError,'OK');
+          this.openSnackBar(this.serverError, 'OK');
           console.log(error);
         }
       );
@@ -125,9 +125,10 @@ export class RegistrationComponent implements OnInit {
   }
 
   openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-    });
+    if (this._appcomp.receiveConfirmationMessages)
+      this.snackBar.open(message, action, {
+        duration: 3000,
+      });
   }
 
   onDelete() {
@@ -136,18 +137,18 @@ export class RegistrationComponent implements OnInit {
       this.del = true;
       this._enrollment.deleteUser(this.flag).subscribe(
         data => {
-          if(data.status) {
-            this.openSnackBar('Participant Deleted Successfully !!!','OK');
+          if (data.status) {
+            this.openSnackBar('Participant Deleted Successfully !!!', 'OK');
             this.endPB();
           }
           else {
-            this.openSnackBar('Participant Deletion Failure !!! '+this.databaseError,'OK');
+            this.openSnackBar('Participant Deletion Failure !!! ' + this.databaseError, 'OK');
             this.endPB();
           }
           this.onQuery(false);
         },
         error => {
-          this.openSnackBar(this.serverError,'OK');
+          this.openSnackBar(this.serverError, 'OK');
           this.endPB();
           console.log(error);
         }
@@ -161,24 +162,24 @@ export class RegistrationComponent implements OnInit {
     this.flag = '';
     this._enrollment.fetch().subscribe(
       data => {
-        if(data.status) {
-          this.openSnackBar('All Participants Retrieved Successfully !!!','OK');
+        if (data.status) {
+          this.openSnackBar('All Participants Retrieved Successfully !!!', 'OK');
           this.users = data.data;
           this.elementData = this.users;
           this.dataSource = new MatTableDataSource(this.elementData);
           this.sortByKey(this.users, "name");
         }
         else {
-          this.openSnackBar('Participants Retrieval Failure !!! '+this.databaseError,'OK');
+          this.openSnackBar('Participants Retrieval Failure !!! ' + this.databaseError, 'OK');
           console.log(data.data);
         }
-        if(!start)
+        if (!start)
           this.endPB();
       },
       error => {
-        this.openSnackBar(this.serverError,'OK');
+        this.openSnackBar(this.serverError, 'OK');
         console.log(error);
-        if(!start)
+        if (!start)
           this.endPB();
       }
     );

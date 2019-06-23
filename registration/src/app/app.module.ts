@@ -17,7 +17,7 @@ import { SearchPipe } from './search.pipe';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatTableModule, MatChipsModule, MatTooltipModule, MatSnackBarModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatTableModule, MatChipsModule, MatTooltipModule, MatSnackBarModule, MatSlideToggleModule, MatMenuModule } from '@angular/material';
 import { EnrollmentService } from './enrollment.service';
 import { UserInfoDialogComponent } from './user-info-dialog/user-info-dialog.component';
 
@@ -53,6 +53,8 @@ import { UserInfoDialogComponent } from './user-info-dialog/user-info-dialog.com
     MatChipsModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatSlideToggleModule,
+    MatMenuModule,
     BrowserAnimationsModule
   ],
   providers: [EnrollmentService, NgProgressComponent],
