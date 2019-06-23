@@ -4,7 +4,7 @@ import { EnrollmentService } from '../enrollment.service';
 import { AppComponent } from '../app.component';
 import { Flawless } from '../flawless';
 import { UserInfoDialogComponent } from '../user-info-dialog/user-info-dialog.component';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { NgProgressComponent } from '@ngx-progressbar/core';
 
 export interface PeriodicElement {
@@ -32,8 +32,10 @@ export class FlawlessComponent implements OnInit {
   @ViewChild('fteams') table: ElementRef;
   @ViewChild(NgProgressComponent) progBar: NgProgressComponent;
   searchText: string = '';
-  constructor(public _enrollment: EnrollmentService, public _appcomp: AppComponent, public _location: Location, public dialog: MatDialog) { }
+  constructor(public _enrollment: EnrollmentService, public _appcomp: AppComponent, public _location: Location, public dialog: MatDialog, public snackBar: MatSnackBar) { }
 
+  databaseError = 'Please Check Your DataBase connectivity. If you are using MongoDB at localhost, make sure it is turned on. If you are using online MongoDB server, check your internet connection.';
+  serverError = 'Some Internal Server Error Occured !!! Please check the server connection';
   displayedColumns: string[] = ['1', '2', '3', '4', '5', '6'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.teams);
   elementData: PeriodicElement[];
@@ -52,6 +54,12 @@ export class FlawlessComponent implements OnInit {
 
   ngOnInit() {
     this.onQuery(true);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 3000,
+    });
   }
 
   checkExistance(v: string) {
@@ -128,9 +136,18 @@ export class FlawlessComponent implements OnInit {
     }
     this._enrollment.teamUpFlawless(this.userModel).subscribe(
       data => {
+        if (data.status) {
+          this.openSnackBar('Flawless Team Created Successfully !!!', 'OK');
+        }
+        else {
+          this.openSnackBar('Flawless Team Creation Failure !!! ' + this.databaseError, 'OK');
+        }
         this.onQuery(false);
       },
-      error => console.log('Error', error),
+      error => {
+        this.openSnackBar(this.serverError, 'OK');
+        console.log(error);
+      }
     );
     this.i = 0;
     this.done = false;
@@ -145,48 +162,74 @@ export class FlawlessComponent implements OnInit {
     this.actualusers = [];
     this._enrollment.fetchFlawlessTeam().subscribe(
       data => {
-        this.teams = data;
-        this.elementData = this.teams;
-        this.dataSource = new MatTableDataSource(this.elementData);
-        this.teamNum = Object.keys(data).length;
-        this._enrollment.fetchFlawless().subscribe(
-          data => {
-            this.users = data;
-            let total = 0;
-            for (let k = 0; k < Object.keys(data).length; k++) {
-              let val = { selected: false, name: this.users[k].name };
-              if (!this.checkExistance(this.users[k].name + "_" + this.users[k].rcid)) {
-                this.actualusers.push(data[k]);
-                (this.members).push(val);
-                total++;
+        if (data.status) {
+          this.teams = data.data;
+          this.elementData = this.teams;
+          this.dataSource = new MatTableDataSource(this.elementData);
+          this.teamNum = Object.keys(data.data).length;
+          this._enrollment.fetchFlawless().subscribe(
+            data => {
+              if (data.status) {
+                this.users = data.data;
+                let total = 0;
+                for (let k = 0; k < Object.keys(data.data).length; k++) {
+                  let val = { selected: false, name: this.users[k].name };
+                  if (!this.checkExistance(this.users[k].name + "_" + this.users[k].rcid)) {
+                    this.actualusers.push(data.data[k]);
+                    (this.members).push(val);
+                    total++;
+                  }
+                }
+                this.datasize = total;
+                this.sortByKey(this.users, "name");
+                if (!start)
+                  this.endPB();
+                this.openSnackBar('Flawless Event Data Retrieved Successfully !!!','OK');
               }
+              else {
+                this.openSnackBar('Flawless Participants Retrieval Failure !!! ' + this.databaseError, 'OK');
+                console.log(data.data);
+              }
+            },
+            error => {
+              this.openSnackBar(this.serverError, 'OK');
+              console.log(error);
             }
-            this.datasize = total;
-            this.sortByKey(this.users, "name");
-            if(!start)
-              this.endPB();
-          },
-          error => console.log('Error', error),
-        );
+          );
+        }
+        else {
+          this.openSnackBar('Flawless Teams Retrieval Failure !!! ' + this.databaseError, 'OK');
+          console.log(data.data);
+        }
       },
-      error => console.log('Error', error),
+      error => {
+        this.openSnackBar(this.serverError, 'OK');
+        console.log(error);
+      }
     );
-
   }
 
   goWork(i: number) {
     if (this.type != '') {
-    this.startPB();
+      this.startPB();
       if (this.teams[this.empty].members.mem2 == "")
         this.emptyMem = "mem2";
       else if (this.teams[this.empty].members.mem3 == "")
         this.emptyMem = "mem3";
       this._enrollment.addMemberFlawless({ id: this.teams[this.empty]._id, emptyMember: this.emptyMem, value: this.actualusers[i].name + "_" + this.actualusers[i].rcid }).subscribe(
         data => {
-          alert('Member Added !!!');
+          if (data.status) {
+            this.openSnackBar('Flawless Team Member Added Successfully !!!', 'OK');
+          }
+          else {
+            this.openSnackBar('Flawless Team Member Addition Failure !!! ' + this.databaseError, 'OK');
+          }
           this.onQuery(false);
         },
-        error => console.log('Error', error),
+        error => {
+          this.openSnackBar(this.serverError, 'OK');
+          console.log(error);
+        }
       );
     }
     this.emptyMem = '';
@@ -224,10 +267,18 @@ export class FlawlessComponent implements OnInit {
       }
       this._enrollment.delMemberFlawless({ id: this.teams[i]._id, m1: d1, m2: d2, m3: d3 }).subscribe(
         data => {
-          alert('Member Removed !!!');
+          if (data.status) {
+            this.openSnackBar('Flawless Team Member Removed Successfully !!!', 'OK');
+          }
+          else {
+            this.openSnackBar('Flawless Team Member Removal Failure !!! ' + this.databaseError, 'OK');
+          }
           this.onQuery(false);
         },
-        error => console.log('Error', error),
+        error => {
+          this.openSnackBar(this.serverError, 'OK');
+          console.log(error);
+        }
       );
     }
     this.empty = -1;
@@ -237,10 +288,18 @@ export class FlawlessComponent implements OnInit {
     this.startPB();
     this._enrollment.delTeamFlawless({ id: this.teams[i]._id }).subscribe(
       data => {
-        alert('Team Removed !!!');
+        if (data.status) {
+          this.openSnackBar('Flawless Team Removed Successfully !!!', 'OK');
+        }
+        else {
+          this.openSnackBar('Flawless Team Removal Failure !!! ' + this.databaseError, 'OK');
+        }
         this.onQuery(false);
       },
-      error => console.log('Error', error),
+      error => {
+        this.openSnackBar(this.serverError, 'OK');
+        console.log(error);
+      }
     );
   }
 

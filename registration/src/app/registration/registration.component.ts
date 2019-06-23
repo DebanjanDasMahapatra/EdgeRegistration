@@ -162,14 +162,14 @@ export class RegistrationComponent implements OnInit {
     this._enrollment.fetch().subscribe(
       data => {
         if(data.status) {
-          this.openSnackBar('Users Retrieved Successfully !!!','OK');
+          this.openSnackBar('All Participants Retrieved Successfully !!!','OK');
           this.users = data.data;
           this.elementData = this.users;
           this.dataSource = new MatTableDataSource(this.elementData);
           this.sortByKey(this.users, "name");
         }
         else {
-          this.openSnackBar('Users Retrieval Failure !!! '+this.databaseError,'OK');
+          this.openSnackBar('Participants Retrieval Failure !!! '+this.databaseError,'OK');
           console.log(data.data);
         }
         if(!start)
