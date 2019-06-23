@@ -13,7 +13,6 @@ import { BughuntComponent } from './bughunt/bughunt.component';
 import { CryptoquestComponent } from './cryptoquest/cryptoquest.component';
 import { WebdesignComponent } from './webdesign/webdesign.component';
 import { RegistrationComponent } from './registration/registration.component';
-import { SearchPipe } from './search.pipe';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,7 +30,6 @@ import { UserInfoDialogComponent } from './user-info-dialog/user-info-dialog.com
     CryptoquestComponent,
     WebdesignComponent,
     RegistrationComponent,
-    SearchPipe,
     RegisterDialogComponent,
     UserInfoDialogComponent
   ],

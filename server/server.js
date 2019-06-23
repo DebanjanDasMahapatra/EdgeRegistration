@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-const uri = "mongodb://localhost/test";
+const localuri = "mongodb://10.10.101.187/test";
+const uri = "mongodb+srv://debanjan_01:debanjan@firstcluster-yy6sf.mongodb.net/test?retryWrites=true";
 mongoose.connect(uri, { useNewUrlParser: true });
 mongoose.connection.on('open', () => {
     console.log("Connected to the Data Base");
