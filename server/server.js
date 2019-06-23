@@ -4,9 +4,8 @@ const cors = require('cors');
 const mongoose = require("mongoose");
 const fs = require("fs");
 mongoose.Promise = global.Promise;
-const localuri = "mongodb://10.10.101.187/test";
-const uri = "mongodb+srv://debanjan_01:debanjan@firstcluster-yy6sf.mongodb.net/test?retryWrites=true";
-mongoose.connect(uri,{ useNewUrlParser: true });
+const localuri = "mongodb://localhost/test";
+mongoose.connect(localuri,{ useNewUrlParser: true });
 mongoose.connection.on('open', () => {
     console.log("Connected to the Data Base");
 });
