@@ -1,0 +1,131 @@
+<ng-progress #progBar thick="true"></ng-progress>
+<div class="container">
+  <h3 class="text-center text-label" style="margin-top:50px;">Registered Participants for Bughunt</h3>
+  <div style="text-align: left; margin-top:50px;">
+    <ol class="display: inline;">
+      <li>You can select Maximum {{teamsize}} members for a team. </li>
+      <li>Click the select column for each row to select / deselect member(s).</li>
+    </ol>
+  </div>
+
+  <form #bughunt="ngForm" (ngSubmit)="onSubmit($event)" novalidate>
+    <table class="table table-bordered table-sm" [class.table-hover]="empty != -1">
+      <thead>
+        <tr>
+          <th scope="col">Select</th>
+          <th scope="col">Name</th>
+          <th scope="col">RC ID</th>
+          <th scope="col">College</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of actualusers; let i=index;" (click)="goWork(i)">
+          <td (click)="checkTeam(i)" style="cursor: pointer"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
+          </td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.rcid }}</td>
+          <td>{{ user.college }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h5 class="text-secondary">The participants who already formed team will not be shown above.</h5>
+    <small *ngIf="actualusers.length == 0" class="text-danger">It seems that all registered participants have already
+      formed teams !!! Please wait for more registrations !!!</small><br>
+      <small *ngIf="!_appcomp.loggedIn" class="text-primary">Please Login to Create Teams</small>
+      <div *ngIf="actualusers.length != 0 && _appcomp.loggedIn">
+      <mat-form-field appearance="outline" style="width: 30%">
+        <mat-label>Enter Team Name:</mat-label>
+        <input matInput #name="ngModel" name="teamName" [(ngModel)]="userModel.name"
+          placeholder="Team Name (Max 15 Characters)" maxlength="15" required>
+        <mat-error *ngIf="name.required">Team Name is required</mat-error>
+        <mat-error *ngIf="name.invalid">Team Name is invalid</mat-error>
+      </mat-form-field>
+      <button mat-raised-button class="float-right" color="accent" type="submit" [disabled]="!done || bughunt.form.invalid">Confirm Team</button>
+    </div>
+  </form>
+
+  <hr style="border-color: blue; border: 2px solid blue">
+  
+  <mat-form-field class="float-center" style="width: 60%">
+      <input matInput (input)="applyFilter($event.target.value)" placeholder="Search Teams...">
+    </mat-form-field>
+  <button mat-raised-button color="primary" (click)="ExportToExcel('Bughunt')" *ngIf="teamNum > 0" class="float-right">
+    <mat-icon>get_app</mat-icon>Team Chart xlsx
+  </button>
+  <h3>Bughunt Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found !!!)</small></h3>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" style="width: 100%;">
+
+      <ng-container matColumnDef="1">
+        <th mat-header-cell *matHeaderCellDef> Team# </th>
+        <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="2">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="3">
+        <th mat-header-cell *matHeaderCellDef> Member 1 </th>
+        <td mat-cell *matCellDef="let element; let i = index;" (click)="delMember(i,'mem1')"
+          [class.cell-hover]="empty == i && type != 'a'"> {{element.members.mem1}}
+          <mat-icon (click)="infoDisplay(element.members.mem1.split('_')[1])" style="cursor: pointer">info_outline
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="4">
+        <th mat-header-cell *matHeaderCellDef> Member 2 </th>
+        <td mat-cell *matCellDef="let element; let i = index;" (click)="delMember(i,'mem2')"
+          [class.cell-hover]="empty == i && type != 'a'"> {{element.members.mem2}}
+          <mat-icon (click)="infoDisplay(element.members.mem2.split('_')[1])" style="cursor: pointer">info_outline
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="5">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element; let i = index;"> <button mat-icon-button color="accent"
+            *ngIf="element.members.mem2 == '' && actualusers.length > 0 && _appcomp.loggedIn"
+            (click)="type = 'a'; empty = i;">
+            <mat-icon>person_add</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" *ngIf="element.members.mem2 != '' &&_appcomp.loggedIn"
+            (click)="empty = i;">
+            <mat-icon>person_add_disabled</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="delTeam(i)" *ngIf="_appcomp.loggedIn">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-label *ngIf="!_appcomp.loggedIn">Not Logged In</mat-label>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns; let i=index;"></tr>
+    </table>
+  </div><br><br>
+</div>
+
+
+
+<!-- TABLE FOR DOWNLOADING -->
+<table class="table table-bordered table-sm" #bteams hidden>
+  <thead>
+    <tr>
+      <th scope="col">Team#</th>
+      <th scope="col">Team Name</th>
+      <th scope="col" colspan="2">Member(s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of teams; let i=index;">
+      <td>{{ i+1 }}</td>
+      <td>{{ team.name }}</td>
+      <td>{{ team.members.mem1 }}</td>
+      <td>{{ team.members.mem2 }}</td>
+    </tr>
+  </tbody>
+</table>

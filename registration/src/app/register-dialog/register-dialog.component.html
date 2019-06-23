@@ -1,0 +1,94 @@
+<h1 mat-dialog-title>Register</h1>
+<p>User details can be edited if required later. But the Name and RC ID can't be edited. Be careful while entering them.</p>
+<form #userForm="ngForm" novalidate>
+  <div mat-dialog-content>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Enter New Username</mat-label>
+      <input matInput [(ngModel)]="data.userModel.name" pattern="[a-zA-Z ]+" name="uname" placeholder="New Username"
+        #uname="ngModel" required [disabled]="data.editing">
+      <mat-error *ngIf="uname.Invalid">Invalid Username</mat-error>
+      <mat-error *ngIf="uname.required">Username is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Enter RC-ID:</mat-label>
+      <input matInput [(ngModel)]="data.userModel.rcid" name="rcid" placeholder="Your RC ID" #rcid="ngModel"
+        (input)="checkRedundancy($event)" required [disabled]="data.editing">
+      <mat-error *ngIf="rcid.required">RC-ID is required</mat-error>
+      <mat-error *ngIf="errorMsg">RC-ID is required</mat-error>
+      <small class="text-danger" *ngIf="errorMsg">This RC-ID is already registered</small>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Enter College Name:</mat-label>
+      <input matInput [(ngModel)]="data.userModel.college" name="collegeName" pattern="[a-zA-Z ]+"
+        placeholder="Your College" #collegeName="ngModel" required>
+      <mat-error *ngIf="collegeName.required">College is required</mat-error>
+      <mat-error *ngIf="collegeName.invalid">College is invalid</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Enter Email ID:</mat-label>
+      <input matInput [(ngModel)]="data.userModel.emaill" name="emaill"
+        pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" placeholder="Your College" #emaill="ngModel" required>
+      <mat-error *ngIf="emaill.required">Email is required</mat-error>
+      <mat-error *ngIf="emaill.invalid">Email is invalid</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Your Stream:</mat-label>
+      <mat-select [(ngModel)]="data.userModel.stream" name="streamName" #streamName="ngModel" required>
+        <mat-option value="" selected>Your stream...</mat-option>
+        <mat-option *ngFor="let stream of streams" value="{{stream}}">
+          {{stream}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="streamName.required">Stream is required</mat-error>
+      <mat-error *ngIf="streamName.invalid">Stream is invalid</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Your Year:</mat-label>
+      <mat-select [(ngModel)]="data.userModel.year" name="year" #year="ngModel" required>
+        <mat-option value="" selected>Your Year...</mat-option>
+        <mat-option value="1st" class="text-label">1st</mat-option>
+        <mat-option value="2nd" class="text-label">2nd</mat-option>
+        <mat-option value="3rd" class="text-label">3rd</mat-option>
+        <mat-option value="4th" class="text-label">4th</mat-option>
+        <mat-option value="Other" class="text-label">Other</mat-option>
+      </mat-select>
+      <mat-error *ngIf="year.required">Year is required</mat-error>
+      <mat-error *ngIf="year.invalid">Year is invalid</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Enter Contact Number:</mat-label>
+      <input matInput [(ngModel)]="data.userModel.contact" name="contact" pattern="^\d{10}$" placeholder="Your Contact"
+        #contact="ngModel" required>
+      <mat-error *ngIf="contact.required">Contact is required</mat-error>
+      <mat-error *ngIf="contact.invalid">Contact is invalid</mat-error>
+    </mat-form-field>
+
+    <h5>Events Participating in: </h5><small class="text-danger">You can add events later. Removal is not allowed.</small><br>
+    <mat-checkbox [(ngModel)]="data.userModel.events.flawless" #flawless="ngModel" name="flawless" id="exampleCheck1" [disabled]="data.editing && data.userModel.events.flawless">
+      <mat-label for="exampleCheck1">Flawless</mat-label>
+    </mat-checkbox><br>
+    <mat-checkbox [(ngModel)]="data.userModel.events.bughunt" #bughunt="ngModel" name="bughunt" id="exampleCheck2" [disabled]="data.editing && data.userModel.events.bughunt">
+      <mat-label for="exampleCheck2">Bughunt</mat-label>
+    </mat-checkbox><br>
+    <mat-checkbox [(ngModel)]="data.userModel.events.cryptoquest" #cryptoquest="ngModel" name="cryptoquest" id="exampleCheck3" [disabled]="data.editing && data.userModel.events.cryptoquest">
+      <mat-label for="exampleCheck3">CryptoQuest</mat-label>
+    </mat-checkbox><br>
+    <mat-checkbox [(ngModel)]="data.userModel.events.webdesign" #webdesign="ngModel" name="webdesign" id="exampleCheck4" [disabled]="data.editing && data.userModel.events.webdesign">
+      <mat-label for="exampleCheck4">WebDesign</mat-label>
+    </mat-checkbox>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="accent" [mat-dialog-close]="userNew" cdkFocusInitial
+      class="float-right">Cancel</button>
+    <button type="button" mat-raised-button class="float-right" [mat-dialog-close]="data.userModel" cdkFocusInitial
+      color="primary" [disabled]="userForm.form.invalid || errorMsg" color="primary">{{!data.editing ? 'Register' : 'Save Changes'}}</button>
+  </div>
+</form>

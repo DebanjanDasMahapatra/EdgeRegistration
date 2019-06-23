@@ -3,10 +3,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require("mongoose");
 const fs = require("fs");
-const {c, cpp, node, python, java} = require('compile-run');
 mongoose.Promise = global.Promise;
-const localuri = "mongodb://localhost:27017/test";
-mongoose.connect(localuri,{ useNewUrlParser: true });
+const localuri = "mongodb://10.10.101.187/test";
+const uri = "mongodb+srv://debanjan_01:debanjan@firstcluster-yy6sf.mongodb.net/test?retryWrites=true";
+mongoose.connect(uri,{ useNewUrlParser: true });
+mongoose.connection.on('open', () => {
+    console.log("Connected to the Data Base");
+});
+mongoose.connection.on('error', () => {
+    console.log("Error connecting to the Data Base");
+});
 const scheme = require('./schema/schema');
 var User = mongoose.model("User", scheme.schema);
 var TFlaw = mongoose.model("Flawless", scheme.schemaF);
@@ -19,51 +25,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-app.use(express.static(__dirname+'\\register'));
-app.post('/execute', function(req, res) {
-    fs.writeFile("C:\\Users\\user\\Desktop\\submitfile."+req.body.l,req.body.c, function(err) {
-        if(err) {
-            return console.log(err);
-        }
-    }); 
-	console.log("Code is",req.body.c);
-    // fs.readFile("C:\\Users\\user\\Desktop\\input.txt",'utf8',function(err, contents) {
-    //     input = contents;
-    //     console.log(input);
-    // });
-    var input = fs.readFileSync("C:\\Users\\user\\Desktop\\input2.txt",'utf8').toString();
-    var output = fs.readFileSync("C:\\Users\\user\\Desktop\\output2.txt",'utf8').toString();
-    let resultPromise;
-    if(req.body.l == 'c')
-        resultPromise = c.runFile('C:\\Users\\user\\Desktop\\submitfile.c', { stdin: input, timeout: 1000});
-    if(req.body.l == 'cpp')
-        resultPromise = cpp.runFile('C:\\Users\\user\\Desktop\\submitfile.cpp', { stdin: input, timeout: 1000});
-    if(req.body.l == 'java')
-        resultPromise = java.runFile('C:\\Users\\user\\Desktop\\submitfile.java', { stdin: input, timeout: 1000});
-    if(req.body.l == 'py')
-        resultPromise = python.runFile('C:\\Users\\user\\Desktop\\submitfile.py', { stdin: input, timeout: 1000});
-    resultPromise
-        .then(result => {
-            if(result.errorType == "run-time") {
-                if(result.exitCode == null)
-                  res.status(200).send({res: result, code: 4});
-                if(result.exitCode > 0)
-                  res.status(200).send({res: result, code: 3});
-            }
-            else
-            if(result.errorType == "compile-time") {
-                res.status(200).send({res: result, code: 2});
-            }
-            else
-            if(output == result.stdout)
-              res.status(200).send({res: result, code: 1});
-            else
-              res.status(200).send({res: result, code: 0});
-        })
-        .catch(err => {
-            res.status(200).send(err);
-        });
-});
+app.use(express.static(__dirname + '\\public'));
 
 app.post('/user/enroll', function(req, res) {
     var myData = new User(req.body);
@@ -75,6 +37,7 @@ app.post('/user/enroll', function(req, res) {
         console.log("Error:"+err);
     });
 });
+
 app.post('/user/change', function(req, res) {
     res.status(200).send({'POST':'User Update'});
     var myData = new User(req.body.prev);
@@ -340,8 +303,8 @@ app.get('/webdesign/getTeams', function(req, res) {
     });
 });
 
-app.get('*', function(req, res) {
-    res.sendFile(__dirname+'/register/index.html');
+app.get('*', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(PORT, function() {

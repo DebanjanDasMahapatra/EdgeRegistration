@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-brand">Compute@id</span>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="/homenavbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+              <a class="nav-item nav-link" routerLink="/home">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-item nav-link" routerLink="/registration">Registration <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-item nav-link" routerLink="/flawless">Flawless Teams <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-item nav-link" routerLink="/bughunt">BugHunt Teams <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-item nav-link" routerLink="/cryptoquest">CryptoQuest Teams <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-item nav-link" routerLink="/webdesign">WebDesign Teams <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+      </div>
+    <mat-form-field class="float-right" *ngIf="!_appcomp.loggedIn" style="margin-right: 3%">
+        <input matInput [(ngModel)]="password" placeholder="Admin Password">
+    </mat-form-field>
+    <button mat-raised-button (click)="login()" *ngIf="!_appcomp.loggedIn">Login</button>
+    <button mat-raised-button class="float-right" (click)="logout()" *ngIf="_appcomp.loggedIn">Logout</button>
+  </div>
+</nav>

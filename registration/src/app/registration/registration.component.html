@@ -1,0 +1,163 @@
+<ng-progress #progBar thick="true"></ng-progress>
+<div class="container">
+  <h3 class="text-center text-label" style="margin-top: 50px; margin-bottom: 50px">All Registrations
+  </h3>
+  <small *ngIf="!_appcomp.loggedIn" class="text-primary text-center">Please Login to Register Participants</small>
+  <div class="row">
+    <div class="col-3"><button mat-raised-button color="accent" (click)="openRegisterDialog(false)" [disabled]="!_appcomp.loggedIn">Register New
+        Participant</button></div>
+    <div class="col-6">
+      <mat-form-field class="float-center" style="width: 100%">
+        <input matInput (input)="applyFilter($event.target.value)" placeholder="Search Users...">
+      </mat-form-field>
+    </div>
+    <div class="col-3"><button mat-raised-button color="primary" (click)="ExportToExcel('Registrations')"
+        class="float-right">
+        <mat-icon>get_app</mat-icon>Download List (xlsx)
+      </button></div>
+  </div>
+
+  <br>
+</div>
+<div style="margin-left: 5%; margin-right: 5%">
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" style="width: 100%;">
+
+      <ng-container matColumnDef="1">
+        <th mat-header-cell *matHeaderCellDef> # </th>
+        <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="2">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="3">
+        <th mat-header-cell *matHeaderCellDef> RC ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.rcid}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="4">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.emaill}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="5">
+        <th mat-header-cell *matHeaderCellDef> College </th>
+        <td mat-cell *matCellDef="let element" [matTooltip]="element.college" matTooltipPosition="after">
+          {{element.college.length > 10 ? element.college.split(" ")[0] : element.college}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="6">
+        <th mat-header-cell *matHeaderCellDef> Stream </th>
+        <td mat-cell *matCellDef="let element"> {{element.stream}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="7">
+        <th mat-header-cell *matHeaderCellDef> Year </th>
+        <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="8">
+        <th mat-header-cell *matHeaderCellDef> Contact </th>
+        <td mat-cell *matCellDef="let element"> {{element.contact}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="9">
+        <th mat-header-cell *matHeaderCellDef> Flawless </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-list>
+            <mat-chip *ngIf="element.events.flawless">Flawless</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="10">
+        <th mat-header-cell *matHeaderCellDef> Bughunt </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-list>
+            <mat-chip *ngIf="element.events.bughunt">Bughunt</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="11">
+        <th mat-header-cell *matHeaderCellDef> CryptoQuest </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-list>
+            <mat-chip *ngIf="element.events.cryptoquest">CryptoQuest</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="12">
+        <th mat-header-cell *matHeaderCellDef> Webdesign </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-list>
+            <mat-chip *ngIf="element.events.webdesign">Webdesign</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="13">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element"> <button mat-icon-button color="primary"
+            (click)="userModel = element; flag = element._id; openRegisterDialog(true)" *ngIf="_appcomp.loggedIn">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="flag = element._id; del = true; onDelete()"
+            *ngIf="_appcomp.loggedIn">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-label *ngIf="!_appcomp.loggedIn">Not Logged In</mat-label>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns; let i=index;"></tr>
+    </table>
+  </div>
+  <br><br>
+</div>
+
+
+
+<!-- TABLE FOR DOWNLOADING -->
+<table class="table table-bordered table-sm" #allusers hidden>
+  <thead>
+    <tr>
+      <th scope="col" rowspan="2">Sl. No.</th>
+      <th scope="col" rowspan="2">Name</th>
+      <th scope="col" rowspan="2">RC ID</th>
+      <th scope="col" rowspan="2">Email</th>
+      <th scope="col" rowspan="2">College</th>
+      <th scope="col" rowspan="2">Stream</th>
+      <th scope="col" rowspan="2">Year</th>
+      <th scope="col" rowspan="2">Contact</th>
+      <th scope="col" colspan="4">Events Participating</th>
+    </tr>
+    <tr>
+      <th scope="col">Flawless</th>
+      <th scope="col">Bughunt</th>
+      <th scope="col">CryptoQuest</th>
+      <th scope="col">Webdesign</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users; let i=index;">
+      <td>{{ i+1 }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.rcid }}</td>
+      <td>{{ user.emaill }}</td>
+      <td>{{ user.college }}</td>
+      <td>{{ user.stream }}</td>
+      <td>{{ user.year }}</td>
+      <td>{{ user.contact }}</td>
+      <td>{{ user.events.flawless ? 'Yes' : '' }}</td>
+      <td>{{ user.events.bughunt ? 'Yes' : '' }}</td>
+      <td>{{ user.events.cryptoquest ? 'Yes' : '' }}</td>
+      <td>{{ user.events.webdesign ? 'Yes' : '' }}</td>
+    </tr>
+  </tbody>
+</table>
