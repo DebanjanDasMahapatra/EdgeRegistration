@@ -89,6 +89,6 @@
     <button mat-raised-button color="accent" [mat-dialog-close]="userNew" cdkFocusInitial
       class="float-right">Cancel</button>
     <button type="button" mat-raised-button class="float-right" [mat-dialog-close]="data.userModel" cdkFocusInitial
-      color="primary" [disabled]="userForm.form.invalid || errorMsg" color="primary">{{!data.editing ? 'Register' : 'Save Changes'}}</button>
+      color="primary" [disabled]="(userForm.form.invalid || errorMsg) && !data.editing" color="primary">{{!data.editing ? 'Register' : 'Save Changes'}}</button>
   </div>
 </form>
