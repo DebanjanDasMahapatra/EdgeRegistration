@@ -9,6 +9,8 @@ export class HomeComponent implements OnInit {
 
   constructor() { }
 
+  images = [2,3,4,5];
+
   ngOnInit() {
   }
 
