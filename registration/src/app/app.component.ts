@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 export class AppComponent {
   loggedIn: boolean = false;
   receiveConfirmationMessages: boolean = true;
+  pbColor: string = '#ff4fad';
   ExportToExcel(name: string, table: ElementRef, sheet: string)
   {
     const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(table.nativeElement);

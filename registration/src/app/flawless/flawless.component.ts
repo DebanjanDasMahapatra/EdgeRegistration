@@ -45,6 +45,8 @@ export class FlawlessComponent implements OnInit {
   members = [];
   done: boolean;
   teamsize: number = 3;
+  refreshing: boolean = false;
+  refreshMessage: string = 'Refresh';
   type = '';
   info = '';
   empty: number = -1;
@@ -155,7 +157,12 @@ export class FlawlessComponent implements OnInit {
     event.target.reset();
   }
 
-  onQuery(start: boolean) {
+  onQuery(start: boolean, refresh: boolean = false) {
+    if (refresh) {
+      this.startPB();
+      this.refreshing = true;
+      this.refreshMessage = 'Refreshing';
+    }
     this.i = 0;
     this.done = false;
     console.log('Queried');
@@ -183,31 +190,45 @@ export class FlawlessComponent implements OnInit {
                 }
                 this.datasize = total;
                 this.sortByKey(this.users, "name");
-                if (!start)
-                  this.endPB();
+                this.resetPBandRefresh(start,refresh,true);
                 this.openSnackBar('Flawless Event Data Retrieved Successfully !!!', 'OK');
               }
               else {
                 this.openSnackBar('Flawless Participants Retrieval Failure !!! ' + this.databaseError, 'OK');
                 console.log(data.data);
+                this.resetPBandRefresh(start,refresh,false);
               }
             },
             error => {
               this.openSnackBar(this.serverError, 'OK');
               console.log(error);
+              this.resetPBandRefresh(start,refresh,false);
             }
           );
         }
         else {
           this.openSnackBar('Flawless Teams Retrieval Failure !!! ' + this.databaseError, 'OK');
           console.log(data.data);
+          this.resetPBandRefresh(start,refresh,false);
         }
       },
       error => {
         this.openSnackBar(this.serverError, 'OK');
         console.log(error);
+        this.resetPBandRefresh(start,refresh,false);
       }
     );
+  }
+
+  resetPBandRefresh(start: boolean, refresh: boolean = false, status: boolean) {
+    if (!start)
+      this.endPB();
+    if (refresh)
+      this.refreshing = false;
+    if(status)
+      this.refreshMessage = 'Refresh';
+    else
+      this.refreshMessage = 'Try Refreshing Again';
   }
 
   goWork(i: number) {

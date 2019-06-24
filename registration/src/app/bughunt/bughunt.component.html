@@ -1,14 +1,16 @@
-<ng-progress #progBar thick="true"></ng-progress>
+<ng-progress #progBar thick="true" [color]="_appcomp.pbColor"></ng-progress>
 <div class="container">
   <h3 class="text-center text-label" style="margin-top:50px;">Registered Participants for Bughunt</h3>
-  <button mat-raised-button (click)="onQuery(false)" class="float-right"><mat-icon>refresh</mat-icon> Refresh</button>
+  <button mat-raised-button (click)="onQuery(false,true)" class="float-right" [disabled]="refreshing">
+    <mat-icon *ngIf="!refreshing">refresh</mat-icon>
+    <div class="lds-ellipsis" *ngIf="refreshing"><div></div><div></div><div></div><div></div></div>{{ refreshMessage }}
+  </button>
   <div style="text-align: left; margin-top:50px;">
     <ol class="display: inline;">
       <li>You can select Maximum {{teamsize}} members for a team. </li>
       <li>Click the select column for each row to select / deselect member(s).</li>
     </ol>
   </div>
-
   <form #bughunt="ngForm" (ngSubmit)="onSubmit($event)" novalidate>
     <table class="table table-bordered table-sm" [class.table-hover]="empty != -1">
       <thead class="thead thead-dark">
@@ -21,9 +23,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of actualusers; let i=index;" (click)="goWork(i)">
-          <td *ngIf="_appcomp.loggedIn" (click)="checkTeam(i)" style="cursor: pointer"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
+          <td *ngIf="_appcomp.loggedIn" (click)="checkTeam(i)" style="cursor: pointer"><i
+              *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
           </td>
-          <td *ngIf="!_appcomp.loggedIn" style="cursor: no-drop"><i *ngIf="members[i].selected && empty == -1" class="material-icons">&#xe834;</i>
+          <td *ngIf="!_appcomp.loggedIn" style="cursor: no-drop"><i *ngIf="members[i].selected && empty == -1"
+              class="material-icons">&#xe834;</i>
           </td>
           <td>{{ user.name }}</td>
           <td>{{ user.rcid }}</td>
@@ -34,8 +38,8 @@
     <h5 class="text-secondary">The participants who already formed team will not be shown above.</h5>
     <small *ngIf="actualusers.length == 0" class="text-danger">It seems that all registered participants have already
       formed teams !!! Please wait for more registrations !!!</small><br>
-      <small *ngIf="!_appcomp.loggedIn" class="text-primary">Please Login to Create Teams</small>
-      <div *ngIf="actualusers.length != 0 && _appcomp.loggedIn">
+    <small *ngIf="!_appcomp.loggedIn" class="text-primary">Please Login to Create Teams</small>
+    <div *ngIf="actualusers.length != 0 && _appcomp.loggedIn">
       <mat-form-field appearance="outline" style="width: 30%">
         <mat-label>Enter Team Name:</mat-label>
         <input matInput #name="ngModel" name="teamName" [(ngModel)]="userModel.name"
@@ -43,16 +47,17 @@
         <mat-error *ngIf="name.required">Team Name is required</mat-error>
         <mat-error *ngIf="name.invalid">Team Name is invalid</mat-error>
       </mat-form-field>
-      <button mat-raised-button class="float-right" color="accent" type="submit" [disabled]="!done || bughunt.form.invalid">Confirm Team</button>
+      <button mat-raised-button class="float-right" color="accent" type="submit"
+        [disabled]="!done || bughunt.form.invalid">Confirm Team</button>
     </div>
   </form>
 
   <hr style="border-color: blue; border: 2px solid blue">
-  
+
   <h3>Bughunt Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found !!!)</small></h3>
   <mat-form-field class="float-center" style="width: 60%">
-      <input matInput (input)="applyFilter($event.target.value)" placeholder="Search Teams...">
-    </mat-form-field>
+    <input matInput (input)="applyFilter($event.target.value)" placeholder="Search Teams...">
+  </mat-form-field>
   <button mat-raised-button color="primary" (click)="ExportToExcel('Bughunt')" *ngIf="teamNum > 0" class="float-right">
     <mat-icon>get_app</mat-icon>Team Chart xlsx
   </button>

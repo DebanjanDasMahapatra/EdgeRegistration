@@ -45,6 +45,8 @@ export class RegistrationComponent implements OnInit {
   elementData: PeriodicElement[];
   del: boolean = false;
   loaded: boolean = false;
+  refreshing: boolean = false;
+  refreshMessage: string = 'Refresh';
   searchText: string = '';
   constructor(public _enrollment: EnrollmentService, public _appcomp: AppComponent, public dialog: MatDialog, public snackBar: MatSnackBar) { }
 
@@ -162,7 +164,12 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  onQuery(start: boolean) {
+  onQuery(start: boolean, refresh: boolean = false) {
+    if (refresh) {
+      this.startPB();
+      this.refreshing = true;
+      this.refreshMessage = 'Refreshing';
+    }
     console.log('Queried');
     this.loaded = false;
     this.del = false;
@@ -182,6 +189,9 @@ export class RegistrationComponent implements OnInit {
         }
         if (!start)
           this.endPB();
+        if (refresh)
+          this.refreshing = false;
+        this.refreshMessage = 'Refresh';
         this.loaded = true;
       },
       error => {
@@ -189,6 +199,9 @@ export class RegistrationComponent implements OnInit {
         console.log(error);
         if (!start)
           this.endPB();
+        if (refresh)
+          this.refreshing = false;
+        this.refreshMessage = 'Try Refreshing Again';
         this.loaded = true;
       }
     );
