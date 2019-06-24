@@ -44,6 +44,7 @@ export class RegistrationComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>(this.users);
   elementData: PeriodicElement[];
   del: boolean = false;
+  loaded: boolean = false;
   searchText: string = '';
   constructor(public _enrollment: EnrollmentService, public _appcomp: AppComponent, public dialog: MatDialog, public snackBar: MatSnackBar) { }
 
@@ -72,6 +73,7 @@ export class RegistrationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.userModel = result;
       if (result.name) {
+        this.loaded = false;
         this.startPB();
         this.onSubmit(work);
       }
@@ -95,6 +97,7 @@ export class RegistrationComponent implements OnInit {
         error => {
           this.openSnackBar(this.serverError, 'OK');
           console.log(error);
+          this.loaded = true;
         }
       );
     else
@@ -111,6 +114,7 @@ export class RegistrationComponent implements OnInit {
         error => {
           this.openSnackBar(this.serverError, 'OK');
           console.log(error);
+          this.loaded = true;
         }
       );
     this.userModel = this.userNew;
@@ -134,6 +138,7 @@ export class RegistrationComponent implements OnInit {
   onDelete() {
     if (confirm('Sure to Delete ? If you delete, any of the team(s) for any event(s) having this participant as member (if any) will be also be deleted !!!')) {
       this.startPB();
+      this.loaded = false;
       this.del = true;
       this._enrollment.deleteUser(this.flag).subscribe(
         data => {
@@ -151,6 +156,7 @@ export class RegistrationComponent implements OnInit {
           this.openSnackBar(this.serverError, 'OK');
           this.endPB();
           console.log(error);
+          this.loaded = true;
         }
       );
     }
@@ -158,6 +164,7 @@ export class RegistrationComponent implements OnInit {
 
   onQuery(start: boolean) {
     console.log('Queried');
+    this.loaded = false;
     this.del = false;
     this.flag = '';
     this._enrollment.fetch().subscribe(
@@ -175,12 +182,14 @@ export class RegistrationComponent implements OnInit {
         }
         if (!start)
           this.endPB();
+        this.loaded = true;
       },
       error => {
         this.openSnackBar(this.serverError, 'OK');
         console.log(error);
         if (!start)
           this.endPB();
+        this.loaded = true;
       }
     );
   }

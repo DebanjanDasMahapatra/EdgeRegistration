@@ -37,7 +37,7 @@ router.post('/change', (req, res) => {
     var myData = new User(req.body.prev);
     User.updateOne({ "_id": req.body.id }, {
         $set: {
-            "name": myData.name, "college": myData.college, "stream": myData.stream, "contact": myData.contact,
+            "college": myData.college, "stream": myData.stream, "contact": myData.contact, "emaill": myData.emaill, "year": myData.year,
             "events.flawless": myData.events.flawless, "events.bughunt": myData.events.bughunt, "events.cryptoquest": myData.events.cryptoquest, "events.webdesign": myData.events.webdesign
         }
     }).then(
