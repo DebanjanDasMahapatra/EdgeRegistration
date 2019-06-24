@@ -16,7 +16,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatTableModule, MatChipsModule, MatTooltipModule, MatSnackBarModule, MatSlideToggleModule, MatMenuModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatTableModule, MatChipsModule, MatTooltipModule, MatSnackBarModule, MatSlideToggleModule, MatMenuModule, MatProgressSpinnerModule, MatToolbarModule } from '@angular/material';
 import { EnrollmentService } from './enrollment.service';
 import { UserInfoDialogComponent } from './user-info-dialog/user-info-dialog.component';
 
@@ -54,6 +54,7 @@ import { UserInfoDialogComponent } from './user-info-dialog/user-info-dialog.com
     MatSlideToggleModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    MatToolbarModule,
     BrowserAnimationsModule
   ],
   providers: [EnrollmentService, NgProgressComponent],

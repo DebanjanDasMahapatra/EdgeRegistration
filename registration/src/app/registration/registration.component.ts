@@ -65,7 +65,7 @@ export class RegistrationComponent implements OnInit {
 
   openRegisterDialog(work: boolean): void {
     const dialogRef = this.dialog.open(RegisterDialogComponent, {
-      width: '600px',
+      width: '500px',
       hasBackdrop: false,
       data: { userModel: this.userModel, editing: work }
     });

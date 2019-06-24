@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>Register</h1>
-<p>User details can be edited if required later. But the Name and RC ID can't be edited. Be careful while entering them.</p>
+<p class="text-danger">User details can be edited if required later. But the Name and RC ID can't be edited. Be careful while entering them.</p>
 <form #userForm="ngForm" novalidate>
   <div mat-dialog-content>
 
@@ -70,7 +70,7 @@
       <mat-error *ngIf="contact.invalid">Contact is invalid</mat-error>
     </mat-form-field>
 
-    <h5>Events Participating in: </h5><small class="text-danger">You can add events later. Removal is not allowed.</small><br>
+    <h5>Events Participating in: </h5><small class="text-danger">You can add events later. But once added, removal is not allowed.</small><br>
     <mat-checkbox [(ngModel)]="data.userModel.events.flawless" #flawless="ngModel" name="flawless" id="exampleCheck1" [disabled]="data.editing && data.userModel.events.flawless">
       <mat-label for="exampleCheck1">Flawless</mat-label>
     </mat-checkbox><br>
@@ -85,7 +85,7 @@
     </mat-checkbox>
   </div>
 
-  <div mat-dialog-actions>
+  <div mat-dialog-actions style="margin-top: 10px; margin-bottom: 5px;">
     <button mat-raised-button color="accent" [mat-dialog-close]="userNew" cdkFocusInitial
       class="float-right">Cancel</button>
     <button type="button" mat-raised-button class="float-right" [mat-dialog-close]="data.userModel" cdkFocusInitial

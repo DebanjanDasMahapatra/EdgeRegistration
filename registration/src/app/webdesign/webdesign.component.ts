@@ -242,8 +242,8 @@ export class WebdesignComponent implements OnInit {
   }
 
   delMember(i: number, member: string) {
-    this.startPB();
     if (this.empty != -1 && this.empty == i) {
+      this.startPB();
       let d1: string;
       let d2: string;
       if (member == "mem1" && this.teams[i].members.mem2 != "") {

@@ -48,13 +48,13 @@
 
   <hr style="border-color: blue; border: 2px solid blue">
   
+  <h3>Webdesign Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found !!!)</small></h3>
   <mat-form-field class="float-center" style="width: 60%">
       <input matInput (input)="applyFilter($event.target.value)" placeholder="Search Teams...">
     </mat-form-field>
   <button mat-raised-button color="primary" (click)="ExportToExcel('Webdesign')" *ngIf="teamNum > 0" class="float-right">
     <mat-icon>get_app</mat-icon>Team Chart xlsx
   </button>
-  <h3>Webdesign Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found !!!)</small></h3>
 
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" style="width: 100%;">

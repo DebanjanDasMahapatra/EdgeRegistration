@@ -48,7 +48,7 @@
 
   <hr style="border-color: blue; border: 2px solid blue">
   
-  <h3 class="text-label">Flawless Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found !!!)</small></h3>
+  <h3>Flawless Teams <small class="text-danger" *ngIf="teamNum == 0">(Currently no teams found !!!)</small></h3>
   <mat-form-field class="float-center" style="width: 60%">
       <input matInput (input)="applyFilter($event.target.value)" placeholder="Search Teams...">
     </mat-form-field>

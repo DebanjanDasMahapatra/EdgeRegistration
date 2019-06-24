@@ -19,7 +19,7 @@ const cryptoquest = require("./routes/cryptoquest");
 const webdesign = require("./routes/webdesign");
 
 const logRequestStart = (req, res, next) => {
-    console.info(req.method + ' ' + req.originalUrl + ' ' + res.statusCode);
+    console.info(req.method + ' ' + req.originalUrl + ' ' + res.statusCode + ' ' + res.statusMessage);
     next();
 };
 

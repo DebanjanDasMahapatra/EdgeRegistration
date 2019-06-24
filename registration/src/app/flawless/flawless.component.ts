@@ -185,7 +185,7 @@ export class FlawlessComponent implements OnInit {
                 this.sortByKey(this.users, "name");
                 if (!start)
                   this.endPB();
-                this.openSnackBar('Flawless Event Data Retrieved Successfully !!!','OK');
+                this.openSnackBar('Flawless Event Data Retrieved Successfully !!!', 'OK');
               }
               else {
                 this.openSnackBar('Flawless Participants Retrieval Failure !!! ' + this.databaseError, 'OK');
@@ -246,8 +246,8 @@ export class FlawlessComponent implements OnInit {
   }
 
   delMember(i: number, member: string, rcid: number) {
-    this.startPB();
     if (this.empty != -1 && this.empty == i) {
+      this.startPB();
       let d1: string;
       let d2: string;
       let d3: string;

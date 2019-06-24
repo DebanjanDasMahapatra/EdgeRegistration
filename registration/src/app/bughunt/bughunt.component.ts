@@ -183,7 +183,7 @@ export class BughuntComponent implements OnInit {
                 this.sortByKey(this.users, "name");
                 if (!start)
                   this.endPB();
-                this.openSnackBar('Bughunt Event Data Retrieved Successfully !!!','OK');
+                this.openSnackBar('Bughunt Event Data Retrieved Successfully !!!', 'OK');
               }
               else {
                 this.openSnackBar('Bughunt Participants Retrieval Failure !!! ' + this.databaseError, 'OK');
@@ -244,8 +244,8 @@ export class BughuntComponent implements OnInit {
   }
 
   delMember(i: number, member: string) {
-    this.startPB();
     if (this.empty != -1 && this.empty == i) {
+      this.startPB();
       let d1: string;
       let d2: string;
       if (member == "mem1" && this.teams[i].members.mem2 != "") {
