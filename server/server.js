@@ -28,7 +28,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-app.use(express.static(__dirname + '\\public'));
+app.use(express.static(__dirname + '\\registration\\dist\\registration'));
 app.use(logRequestStart);
 
 app.use('/user', user);
@@ -38,7 +38,7 @@ app.use('/cryptoquest', cryptoquest);
 app.use('/webdesign', webdesign);
 
 app.get('*', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(__dirname + '/registration/dist/registration/index.html');
 });
 
 app.listen(PORT, function () {
