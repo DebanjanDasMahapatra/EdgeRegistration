@@ -1,0 +1,135 @@
+<ng-progress #progBar thick="true" [color]="_appcomp.pbColor"></ng-progress><br>
+<div class="container">
+  <h3 class="text-center text-label" style="margin-top: 50px; margin-bottom: 50px">Participant Mailer
+    <button mat-raised-button (click)="loaddata(false,true)" class="float-right" [disabled]="refreshing">
+      <mat-icon *ngIf="!refreshing">refresh</mat-icon>
+      <div class="lds-ellipsis" *ngIf="refreshing">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>{{ refreshMessage }}
+    </button></h3>
+  <br>
+  <h6 class="text-primary text-center" *ngIf="!_appcomp.loggedIn">Please login to send mail(s) to partipant(s)</h6>
+  <form #auth="ngForm" (ngSubmit)="mailUser($event)" novalidate *ngIf="!_appcomp.authorized && _appcomp.loggedIn">
+    <div class="row">
+      <div class="col-8">
+        <mat-form-field appearance="outline" style="width: 60%">
+          <mat-label>Enter the Gmail Password to Authenticate Sender Email:</mat-label>
+          <input matInput [(ngModel)]="secret" placeholder="Enter the Gmail Password"
+            [type]="!hide ? 'password' : 'text'" required name="secret">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon>{{!hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="col-4"><button mat-raised-button color="accent" type="button"
+          (click)="_appcomp.authorized = secret; secret = ''" *ngIf="!_appcomp.authorized" [disabled]="!auth.form.valid"
+          style="vertical-align: middle">Authenticate Sender Email</button></div>
+    </div>
+  </form>
+  <form #mailer="ngForm" (ngSubmit)="mailUser($event)" novalidate *ngIf="_appcomp.authorized && _appcomp.loggedIn">
+    <mat-card class=" mat-elevation-z2">
+      <mat-card-content>
+        <div class="row">
+          <div class="col-8">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>To</mat-label>
+              <input matInput placeholder="To" name="mailTo" [(ngModel)]="to" required disabled>
+            </mat-form-field>
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Subject</mat-label>
+              <input matInput placeholder="Subject" name="mailSub" [(ngModel)]="subject" required>
+            </mat-form-field>
+            <h6 class="text-primary text-center" *ngIf="!messageType">Please select the mailing message type</h6>
+            <mat-form-field appearance="outline" style="width: 100%; height: 100%" *ngIf="messageType">
+              <mat-label>Message in {{messageType | uppercase}} format</mat-label>
+              <textarea matInput rows="10" placeholder="Message" name="mailMsg" [(ngModel)]="message" required
+                style="resize: none"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <h5 class="text-primary text-center">Mail Settings</h5>
+            <hr style="border-color: black">
+            <mat-spinner *ngIf="!loaded" style="margin: auto" [diameter]="40"></mat-spinner>
+            <mat-label>Select Mail Message Type:</mat-label><br>
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="messageType" name="messageTypeSelect" required>
+              <mat-radio-button value="text" checked>Plain Text</mat-radio-button>
+              <mat-radio-button value="html">HTML Text</mat-radio-button>
+            </mat-radio-group><br><br>
+            <mat-label>To whom you will mail ?</mat-label><br>
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="type" name="eventSelect" required>
+              <mat-radio-button value="1" (change)="allReset(true)">Mail to a Team</mat-radio-button>
+              <mat-radio-button value="2" (change)="allReset(true)">Mail to a Participant</mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field *ngIf="type == 1" style="margin-top: 20px;">
+              <mat-label>Select Event:</mat-label>
+              <mat-select [(ngModel)]="festEvent" name="eventSelect" (selectionChange)="allReset(false)" required>
+                <mat-option value="">None</mat-option>
+                <mat-option value="f">Flawless</mat-option>
+                <mat-option value="b">Bughunt</mat-option>
+                <mat-option value="c">Cryptoquest</mat-option>
+                <mat-option value="w">Webdesign</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="type == 2" style="margin-top: 20px;">
+              <mat-label>Select User:</mat-label>
+              <mat-select [(ngModel)]="emailUser" name="userSelect" (selectionChange)="fetchEmailsForMailing(true)"
+                required>
+                <mat-option value="">None</mat-option>
+                <mat-option value="{{i}}" *ngFor="let user of users; let i=index">{{user.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="type == 1 && festEvent == 'f'">
+              <mat-label>Select Team:</mat-label>
+              <mat-select [(ngModel)]="teamIndex" name="teamSelect" (selectionChange)="fetchEmailsForMailing(false)"
+                required>
+                <mat-option value="">None</mat-option>
+                <mat-option value="{{i}}" *ngFor="let team of flawless; let i=index">{{team.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="type == 1 && festEvent == 'b'">
+              <mat-label>Select Team:</mat-label>
+              <mat-select [(ngModel)]="teamIndex" name="teamSelect" (selectionChange)="fetchEmailsForMailing(false)"
+                required>
+                <mat-option value="">None</mat-option>
+                <mat-option value="{{i}}" *ngFor="let team of bughunt; let i=index">{{team.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="type == 1 && festEvent == 'c'">
+              <mat-label>Select Team:</mat-label>
+              <mat-select [(ngModel)]="teamIndex" name="teamSelect" (selectionChange)="fetchEmailsForMailing(false)"
+                required>
+                <mat-option value="">None</mat-option>
+                <mat-option value="{{i}}" *ngFor="let team of cryptoquest; let i=index">{{team.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="type == 1 && festEvent == 'w'">
+              <mat-label>Select Team:</mat-label>
+              <mat-select [(ngModel)]="teamIndex" name="teamSelect" (selectionChange)="fetchEmailsForMailing(false)"
+                required>
+                <mat-option value="">None</mat-option>
+                <mat-option value="{{i}}" *ngFor="let team of webdesign; let i=index">{{team.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <div class="row" style="padding: 5px">
+          <div class="col-10"></div>
+          <div class="col-2">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!mailer.form.valid">Send
+              Mail <mat-icon>send</mat-icon></button>
+          </div>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div><br><br><br><br>
+<h6 class="text-primary text-center" style="position: fixed; top: 92%; margin-left: 200px; margin-right: 200px;"
+  *ngIf="_appcomp.loggedIn">A one-time settings is required. Login into your gmail account. Click your profile picture
+  and click "Google Account" button. Go to the settings tab, scroll down a bit and Turn the setting "Less secure app
+  access" ON.</h6>

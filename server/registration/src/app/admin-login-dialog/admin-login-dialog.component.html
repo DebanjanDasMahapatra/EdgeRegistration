@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>Login</h1>
+
+<form #logForm="ngForm" novalidate>
+  <div mat-dialog-content>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Email ID</mat-label>
+      <input matInput [(ngModel)]="data.credentials.emaill" placeholder="Enter Email ID" #uname="ngModel" required
+        name="uname">
+        <span matSuffix>@gmail.com</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Password</mat-label>
+      <input matInput [(ngModel)]="data.credentials.password" placeholder="Enter Password"
+        [type]="!hide ? 'password' : 'text'" #pswd="ngModel" required name="pswd">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide">
+        <mat-icon>{{!hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="accent" [mat-dialog-close]="credentials" cdkFocusInitial
+      class="float-right">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="data.credentials" cdkFocusInitial class="float-right"
+      [disabled]="!logForm.form.valid">Login</button>
+  </div>
+</form>

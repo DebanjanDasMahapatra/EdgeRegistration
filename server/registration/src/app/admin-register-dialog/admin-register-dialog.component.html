@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>Register</h1>
+
+<form #regForm="ngForm" novalidate>
+  <div mat-dialog-content>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Your Name</mat-label>
+      <input matInput [(ngModel)]="data.user.name" pattern="[a-zA-Z ]+" placeholder="Enter Your Name"
+        #cname="ngModel" required name="cname">
+      <mat-error *ngIf="cname.Invalid">Invalid Name</mat-error>
+      <mat-error *ngIf="cname.required">Name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Your Email</mat-label>
+      <input matInput [(ngModel)]="data.user.emaill" pattern="[a-z0-9._%+-]+$"
+        placeholder="Enter Your Email" #email="ngModel" required name="email">
+        <span matSuffix>@gmail.com</span>
+      <mat-error *ngIf="email.Invalid">Invalid Email</mat-error>
+      <mat-error *ngIf="email.required">Email is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>New Password</mat-label>
+      <input matInput [(ngModel)]="data.user.password" placeholder="Enter a Password"
+        [type]="!hide ? 'password' : 'text'" #pswd="ngModel" required name="pswd">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide">
+        <mat-icon>{{!hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Admin Secret Key</mat-label>
+      <input matInput [(ngModel)]="data.secret" placeholder="Enter the Admin Secret Key"
+        [type]="!hide2 ? 'password' : 'text'" #secret="ngModel" required name="secret">
+      <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide2">
+        <mat-icon>{{!hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="accent" [mat-dialog-close]="resetData" cdkFocusInitial
+      class="float-right">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial class="float-right"
+      [disabled]="!regForm.form.valid">Register</button>
+  </div>
+</form>

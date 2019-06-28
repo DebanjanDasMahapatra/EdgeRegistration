@@ -10,109 +10,118 @@ import { Webdesign } from './webdesign';
   providedIn: 'root'
 })
 export class EnrollmentService {
-  _urlF = '/flawless';
-  _urlB = '/bughunt';
-  _urlC = '/cryptoquest';
-  _urlW = '/webdesign';
-  _urlR = '/user';
-  _url = 'http://localhost';
+  _APIF = '/flawless';
+  _APIB = '/bughunt';
+  _APIC = '/cryptoquest';
+  _APIW = '/webdesign';
+  _APIR = '/user';
+  _APIA = '/admin';
+  _API = 'http://localhost';
 
   constructor(private _http: HttpClient) { }
 
-    //Registration URLs
+    //Registration APIs
     enroll(user: User) {
-      return this._http.post<any>(this._url+this._urlR+'/enroll',user);
+      return this._http.post<any>(this._API+this._APIR+'/enroll',user);
     }
     change(user: User, flag: string) {
-      return this._http.post<any>(this._url+this._urlR+'/change',{prev: user,id: flag});
+      return this._http.post<any>(this._API+this._APIR+'/change',{prev: user,id: flag});
     }
     deleteUser(flag: string) {
-      return this._http.post<any>(this._url+this._urlR+'/delete',{id: flag});
+      return this._http.post<any>(this._API+this._APIR+'/delete',{id: flag});
     }
     fetch() {
-      return this._http.get<any>(this._url+this._urlR+'/fetch');
-    }
-    evaluate(arg0: { c: string; l: string; }) {
-      return this._http.post<any>(this._url+'/execute',arg0);
+      return this._http.get<any>(this._API+this._APIR+'/fetch');
     }
 
-    //Flawless URLs
+    //Flawless APIs
     teamUpFlawless(team: Flawless) {
-      return this._http.post<any>(this._url+this._urlF+'/addTeam',team);
+      return this._http.post<any>(this._API+this._APIF+'/addTeam',team);
     }
     addMemberFlawless(val: {}) {
-      return this._http.post<any>(this._url+this._urlF+'/addTeamMem',val);
+      return this._http.post<any>(this._API+this._APIF+'/addTeamMem',val);
     }
     delMemberFlawless(val: {}) {
-      return this._http.post<any>(this._url+this._urlF+'/delTeamMem',val);
+      return this._http.post<any>(this._API+this._APIF+'/delTeamMem',val);
     }
     delTeamFlawless(val: {}) {
-      return this._http.post<any>(this._url+this._urlF+'/delTeam',val);
+      return this._http.post<any>(this._API+this._APIF+'/delTeam',val);
     }
     fetchFlawless() {
-      return this._http.get<any>(this._url+this._urlF+'/getEligibles');
+      return this._http.get<any>(this._API+this._APIF+'/getEligibles');
     }
     fetchFlawlessTeam() {
-      return this._http.get<any>(this._url+this._urlF+'/getTeams');
+      return this._http.get<any>(this._API+this._APIF+'/getTeams');
     }
 
-    //Bughunt URLs
+    //Bughunt APIs
     teamUpBughunt(team: Bughunt) {
-      return this._http.post<any>(this._url+this._urlB+'/addTeam',team);
+      return this._http.post<any>(this._API+this._APIB+'/addTeam',team);
     }
     addMemberBughunt(val: {}) {
-      return this._http.post<any>(this._url+this._urlB+'/addTeamMem',val);
+      return this._http.post<any>(this._API+this._APIB+'/addTeamMem',val);
     }
     delMemberBughunt(val: {}) {
-      return this._http.post<any>(this._url+this._urlB+'/delTeamMem',val);
+      return this._http.post<any>(this._API+this._APIB+'/delTeamMem',val);
     }
     delTeamBughunt(val: {}) {
-      return this._http.post<any>(this._url+this._urlB+'/delTeam',val);
+      return this._http.post<any>(this._API+this._APIB+'/delTeam',val);
     }
     fetchBughunt() {
-      return this._http.get<any>(this._url+this._urlB+'/getEligibles');
+      return this._http.get<any>(this._API+this._APIB+'/getEligibles');
     }
     fetchBughuntTeam() {
-      return this._http.get<any>(this._url+this._urlB+'/getTeams');
+      return this._http.get<any>(this._API+this._APIB+'/getTeams');
     }
 
-    //Cryptoquest URLs
+    //Cryptoquest APIs
     teamUpCryptoquest(team: Cryptoquest) {
-      return this._http.post<any>(this._url+this._urlC+'/addTeam',team);
+      return this._http.post<any>(this._API+this._APIC+'/addTeam',team);
     }
     addMemberCryptoquest(val: {}) {
-      return this._http.post<any>(this._url+this._urlC+'/addTeamMem',val);
+      return this._http.post<any>(this._API+this._APIC+'/addTeamMem',val);
     }
     delMemberCryptoquest(val: {}) {
-      return this._http.post<any>(this._url+this._urlC+'/delTeamMem',val);
+      return this._http.post<any>(this._API+this._APIC+'/delTeamMem',val);
     }
     delTeamCryptoquest(val: {}) {
-      return this._http.post<any>(this._url+this._urlC+'/delTeam',val);
+      return this._http.post<any>(this._API+this._APIC+'/delTeam',val);
     }
     fetchCryptoquest() {
-      return this._http.get<any>(this._url+this._urlC+'/getEligibles');
+      return this._http.get<any>(this._API+this._APIC+'/getEligibles');
     }
     fetchCryptoquestTeam() {
-      return this._http.get<any>(this._url+this._urlC+'/getTeams');
+      return this._http.get<any>(this._API+this._APIC+'/getTeams');
     }
 
-    //Webdesign URLs
+    //Webdesign APIs
     teamUpWebdesign(team: Webdesign) {
-      return this._http.post<any>(this._url+this._urlW+'/addTeam',team);
+      return this._http.post<any>(this._API+this._APIW+'/addTeam',team);
     }
     addMemberWebdesign(val: {}) {
-      return this._http.post<any>(this._url+this._urlW+'/addTeamMem',val);
+      return this._http.post<any>(this._API+this._APIW+'/addTeamMem',val);
     }
     delMemberWebdesign(val: {}) {
-      return this._http.post<any>(this._url+this._urlW+'/delTeamMem',val);
+      return this._http.post<any>(this._API+this._APIW+'/delTeamMem',val);
     }
     delTeamWebdesign(val: {}) {
-      return this._http.post<any>(this._url+this._urlW+'/delTeam',val);
+      return this._http.post<any>(this._API+this._APIW+'/delTeam',val);
     }
     fetchWebdesign() {
-      return this._http.get<any>(this._url+this._urlW+'/getEligibles');
+      return this._http.get<any>(this._API+this._APIW+'/getEligibles');
     }
     fetchWebdesignTeam() {
-      return this._http.get<any>(this._url+this._urlW+'/getTeams');
+      return this._http.get<any>(this._API+this._APIW+'/getTeams');
+    }
+
+    //Admin APIs
+    adminRegister(val: {}) {
+      return this._http.post<any>(this._API+this._APIA+'/register',val);
+    }
+    adminLogin(val: {}) {
+      return this._http.post<any>(this._API+this._APIA+'/login',val);
+    }
+    mailUsers(val: {}) {
+      return this._http.post<any>(this._API+this._APIA+'/sendMail',val);
     }
 }

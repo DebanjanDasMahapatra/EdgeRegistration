@@ -16,7 +16,7 @@ router.get('/fetch', (req, res) => {
         }
         if (err) {
             console.log("Problem Retrieving Users");
-            res.status(200).json({ status: false, data: err });
+            res.status(502).json({ status: false, data: err });
         }
     });
 });
@@ -28,7 +28,7 @@ router.post('/enroll', (req, res) => {
         console.log("Saved");
     })
         .catch(err => {
-            res.status(200).json({ status: false });
+            res.status(502).json({ status: false });
             console.log("Error:" + err);
         });
 });
@@ -46,7 +46,7 @@ router.post('/change', (req, res) => {
             console.log("Saved");
         })
         .catch(err => {
-            res.status(200).json({ status: false });
+            res.status(502).json({ status: false });
             console.log("Error:" + err);
         });
 });
@@ -72,32 +72,32 @@ router.post('/delete', (req, res) => {
                                                     console.log("Deleted User");
                                                 })
                                                 .catch(err => {
-                                                    res.status(200).json({ status: false });
+                                                    res.status(502).json({ status: false });
                                                     console.log("Error:" + err);
                                                 });
                                         })
                                         .catch(err => {
-                                            res.status(200).json({ status: false });
+                                            res.status(502).json({ status: false });
                                             console.log("Error:" + err);
                                         });
                                 })
                                 .catch(err => {
-                                    res.status(200).json({ status: false });
+                                    res.status(502).json({ status: false });
                                     console.log("Error:" + err);
                                 });
                         })
                         .catch(err => {
-                            res.status(200).json({ status: false });
+                            res.status(502).json({ status: false });
                             console.log("Error:" + err);
                         });
                 })
                 .catch(err => {
-                    res.status(200).json({ status: false });
+                    res.status(502).json({ status: false });
                     console.log("Error:" + err);
                 });
         }
         if (err) {
-            res.status(200).json({ status: false });
+            res.status(502).json({ status: false });
             console.log("Error:" + err);
         }
     });

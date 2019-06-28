@@ -28,5 +28,10 @@ module.exports = { schema: nameSchema = new mongoose.Schema({
     name: String,
     password: String,
     members: {mem1: String, mem2: String}
+   }),
+   schemaA: adminSchema = new mongoose.Schema({
+    name: String,
+    emaill: String,
+    password: String
    })
 };

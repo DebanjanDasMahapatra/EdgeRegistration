@@ -1,3 +1,4 @@
+<ng-progress #progBar thick="true" [color]="_appcomp.pbColor"></ng-progress>
 <mat-toolbar class="mat-elevation-z2" color="primary" style="font-size: 16px">
   <mat-toolbar-row>
     <span>Compute@id</span>
@@ -7,12 +8,12 @@
       <a class="nav-item nav-link myNavLink" routerLink="/bughunt">BugHunt Teams <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link myNavLink" routerLink="/cryptoquest">CryptoQuest Teams <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link myNavLink" routerLink="/webdesign">WebDesign Teams <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link myNavLink" routerLink="/participantmailer">Participant Mailer <span class="sr-only">(current)</span></a>
     <span class="example-spacer"></span>
-    <mat-form-field *ngIf="!_appcomp.loggedIn" style="margin-right: 1%">
-        <input matInput [(ngModel)]="password" placeholder="Admin Password">
-    </mat-form-field>
-    <button mat-raised-button class="mat-elevation-z8" (click)="login()" *ngIf="!_appcomp.loggedIn" style="margin-right: 2%">Login</button>
-    <button mat-raised-button class="mat-elevation-z8" (click)="logout()" *ngIf="_appcomp.loggedIn" style="margin-right: 2%">Logout</button>
+    <button mat-raised-button class="mat-elevation-z8" (click)="openRegisterDialog()" *ngIf="!_appcomp.loggedIn" style="margin-right: 2%">Register</button>
+    <button mat-raised-button class="mat-elevation-z8" (click)="openLoginDialog()" *ngIf="!_appcomp.loggedIn" style="margin-right: 2%">Login</button>
+    <span *ngIf="_appcomp.loggedIn" style="margin-right: 1%">{{name}}</span>
+    <button mat-raised-button class="mat-elevation-z8" (click)="logout()" *ngIf="_appcomp.loggedIn" style="margin-right: 1%">Logout</button>
     <button mat-icon-button class="mat-elevation-z2" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
   </mat-toolbar-row>
 </mat-toolbar>

@@ -6,7 +6,6 @@
   color: black;
 }
 .text-label { color: black; }
-::placeholder { color: black; }
 
 .lds-ellipsis {
   display: inline-block;

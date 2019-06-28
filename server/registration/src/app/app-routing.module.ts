@@ -6,6 +6,7 @@ import { FlawlessComponent } from './flawless/flawless.component';
 import { BughuntComponent } from './bughunt/bughunt.component';
 import { CryptoquestComponent } from './cryptoquest/cryptoquest.component';
 import { WebdesignComponent } from './webdesign/webdesign.component';
+import { ParticipantMailerComponent } from './participant-mailer/participant-mailer.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'flawless', component: FlawlessComponent },
   { path: 'bughunt', component: BughuntComponent },
   { path: 'cryptoquest', component: CryptoquestComponent },
-  { path: 'webdesign', component: WebdesignComponent }
+  { path: 'webdesign', component: WebdesignComponent },
+  { path: 'participantmailer', component: ParticipantMailerComponent }
 ];
 
 @NgModule({

@@ -17,9 +17,10 @@ const flawless = require("./routes/flawless");
 const bughunt = require("./routes/bughunt");
 const cryptoquest = require("./routes/cryptoquest");
 const webdesign = require("./routes/webdesign");
+const admin = require("./routes/admin");
 
 const logRequestStart = (req, res, next) => {
-    console.info(req.method + ' ' + req.originalUrl + ' ' + res.statusCode + ' ' + res.statusMessage);
+    console.info(req.method + ' ' + req.originalUrl + ' ' + res.statusCode);
     next();
 };
 
@@ -36,6 +37,7 @@ app.use('/flawless', flawless);
 app.use('/bughunt', bughunt);
 app.use('/cryptoquest', cryptoquest);
 app.use('/webdesign', webdesign);
+app.use('/admin', admin);
 
 app.get('*', (req, res) => {
     res.sendFile(__dirname + '/registration/dist/registration/index.html');
