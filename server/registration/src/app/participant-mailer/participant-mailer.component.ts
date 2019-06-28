@@ -74,43 +74,43 @@ export class ParticipantMailerComponent implements OnInit {
                         this.openSnackBar('Participant Mailer Initialized Successfully !!!', 'OK');
                       }
                       else {
-                        this.finishLoading(start,refresh,this.databaseError);
+                        this.finishLoading(start, refresh, this.databaseError);
                       }
                     }, error => {
                       console.log(error);
-                      this.finishLoading(start,refresh,this.serverError);
+                      this.finishLoading(start, refresh, this.serverError);
                     });
                   }
                   else {
-                    this.finishLoading(start,refresh,this.databaseError);
+                    this.finishLoading(start, refresh, this.databaseError);
                   }
                 }, error => {
                   console.log(error);
-                  this.finishLoading(start,refresh,this.serverError);
+                  this.finishLoading(start, refresh, this.serverError);
                 });
               }
               else {
-                this.finishLoading(start,refresh,this.databaseError);
+                this.finishLoading(start, refresh, this.databaseError);
               }
             }, error => {
               console.log(error);
-              this.finishLoading(start,refresh,this.serverError);
+              this.finishLoading(start, refresh, this.serverError);
             });
           }
           else {
-            this.finishLoading(start,refresh,this.databaseError);
+            this.finishLoading(start, refresh, this.databaseError);
           }
         }, error => {
           console.log(error);
-          this.finishLoading(start,refresh,this.serverError);
+          this.finishLoading(start, refresh, this.serverError);
         });
       }
       else {
-        this.finishLoading(start,refresh,this.databaseError);
+        this.finishLoading(start, refresh, this.databaseError);
       }
     }, error => {
       console.log(error);
-      this.finishLoading(start,refresh,this.serverError);
+      this.finishLoading(start, refresh, this.serverError);
     });
   }
 
@@ -195,32 +195,30 @@ export class ParticipantMailerComponent implements OnInit {
   mailUser(e: any) {
     if (this.to.length == 0)
       this.openSnackBar('Please select atleast one user to send the mail !!!', 'Ok');
-    else {
-      this.adminPassword = prompt('Please Enter your Gmail Password: ');
-      if (this.adminPassword == '')
-        this.openSnackBar('Please Enter your Gmail Password to Send the Mail !!!', 'Ok');
-      else if (confirm('Send the Mail ?')) {
-        this.startPB();
-        let mailInfo = {
-          users: this.to,
-          subject: this.subject,
-          message: this.message,
-          type: this.messageType,
-          adminEmailId: JSON.parse(localStorage.getItem('loggedIn')).emaill,
-          adminEmailPassword: this.adminPassword
-        };
-        this._enrollment.mailUsers(mailInfo).subscribe(
-          data => {
+    else if (confirm('Send the Mail ?')) {
+      this.startPB();
+      let mailInfo = {
+        users: this.to,
+        subject: this.subject,
+        message: this.message,
+        type: this.messageType,
+        adminEmailId: JSON.parse(localStorage.getItem('loggedIn')).emaill,
+        adminEmailPassword: this._appcomp.authorized
+      };
+      this._enrollment.mailUsers(mailInfo).subscribe(
+        data => {
+          if (data.status)
             this.openSnackBar('Mailed all selected users successfully !!!', 'Thank You');
-            e.target.reset();
-            this.endPB();
-          },
-          error => {
-            this.openSnackBar('Mail Not Sent !!! ' + this.serverError, 'OK');
-            this.endPB();
-          }
-        );
-      }
+          else
+            this.openSnackBar('Mail Sending Problem Occured', 'OK');
+          e.target.reset();
+          this.endPB();
+        },
+        error => {
+          this.openSnackBar('Mail Not Sent !!! ' + this.serverError, 'OK');
+          this.endPB();
+        }
+      );
     }
   }
 }

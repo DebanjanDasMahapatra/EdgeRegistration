@@ -27,7 +27,6 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/sendMail', (req, res) => {
-    console.log(req.body);
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -50,13 +49,14 @@ router.post('/sendMail', (req, res) => {
             subject: req.body.subject,
             text: req.body.message
         };
-    /*transporter.sendMail(mailOptions).then(info => {
+    console.log(mailOptions);
+    transporter.sendMail(mailOptions).then(info => {
         console.log("Success: " + info);
         res.status(200).json({ status: true });
     }).catch(err => {
         console.log("Error: " + err);
         res.status(200).json({ status: false });
-    });*/
+    });
 
 });
 
