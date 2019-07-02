@@ -1,22 +1,27 @@
 <ng-progress #progBar thick="true" [color]="_appcomp.pbColor"></ng-progress>
-<mat-toolbar class="mat-elevation-z2" color="primary" style="font-size: 16px">
-  <mat-toolbar-row>
-    <span>Compute@id</span>
-      <a class="nav-item nav-link myNavLink" routerLink="/home">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link myNavLink" routerLink="/registration">Main Registration <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link myNavLink" routerLink="/flawless">Flawless Teams <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link myNavLink" routerLink="/bughunt">BugHunt Teams <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link myNavLink" routerLink="/cryptoquest">CryptoQuest Teams <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link myNavLink" routerLink="/webdesign">WebDesign Teams <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link myNavLink" routerLink="/participantmailer">Participant Mailer <span class="sr-only">(current)</span></a>
-    <span class="example-spacer"></span>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <span class="navbar-brand">Compute@id</span>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav navbar-nav mr-auto" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link" routerLink="/home">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" routerLink="/registration">Main Registration <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" routerLink="/flawless">Flawless Teams <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" routerLink="/bughunt">BugHunt Teams <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" routerLink="/cryptoquest">CryptoQuest Teams <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" routerLink="/webdesign">WebDesign Teams <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" routerLink="/participantmailer">Participant Mailer <span class="sr-only">(current)</span></a>
+    </ul>
     <button mat-raised-button class="mat-elevation-z8" (click)="openRegisterDialog()" *ngIf="!_appcomp.loggedIn" style="margin-right: 2%">Register</button>
     <button mat-raised-button class="mat-elevation-z8" (click)="openLoginDialog()" *ngIf="!_appcomp.loggedIn" style="margin-right: 2%">Login</button>
-    <span *ngIf="_appcomp.loggedIn" style="margin-right: 1%">{{name}}</span>
+    <span *ngIf="_appcomp.loggedIn" style="margin-right: 1%; color: white">{{name}}</span>
     <button mat-raised-button class="mat-elevation-z8" (click)="logout()" *ngIf="_appcomp.loggedIn" style="margin-right: 1%">Logout</button>
-    <button mat-icon-button class="mat-elevation-z2" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
-  </mat-toolbar-row>
-</mat-toolbar>
+    <button mat-icon-button class="mat-elevation-z2" [matMenuTriggerFor]="menu" style="color: white"><mat-icon>settings</mat-icon></button>
+  </div>
+</nav>
 
 <mat-menu #menu="matMenu">
     <mat-slide-toggle [(ngModel)]="_appcomp.receiveConfirmationMessages" style="font-size: 15px; padding-left: 10px; padding-right: 10px;" labelPosition="before">Confirmation Messages </mat-slide-toggle>

@@ -122,37 +122,36 @@ export class BughuntComponent implements OnInit {
   }
 
   onSubmit(event: any) {
-    if (confirm('Sure to Form Team ?')) {
-      this.startPB();
-      for (let k = 0; k < this.datasize; k++) {
-        if (this.members[k].selected && this.i == 2) {
-          this.userModel.members.mem2 = this.actualusers[k].name + "_" + this.actualusers[k].rcid;
-          this.i--;
-        }
-        else if (this.members[k].selected && this.i == 1) {
-          this.userModel.members.mem1 = this.actualusers[k].name + "_" + this.actualusers[k].rcid;
-          this.i--;
-        }
+    this.startPB();
+    this.userModel.name = this.userModel.name.toUpperCase();
+    for (let k = 0; k < this.datasize; k++) {
+      if (this.members[k].selected && this.i == 2) {
+        this.userModel.members.mem2 = this.actualusers[k].name + "_" + this.actualusers[k].rcid;
+        this.i--;
       }
-      this._enrollment.teamUpBughunt(this.userModel).subscribe(
-        data => {
-          if (data.status) {
-            this.openSnackBar('Bughunt Team Created Successfully !!!', 'OK');
-          }
-          else {
-            this.openSnackBar('Bughunt Team Creation Failure !!! ' + this.databaseError, 'OK');
-          }
-          this.onQuery(false);
-        },
-        error => {
-          this.openSnackBar(this.serverError, 'OK');
-          console.log(error);
-        }
-      );
-      this.i = 0;
-      this.done = false;
-      event.target.reset();
+      else if (this.members[k].selected && this.i == 1) {
+        this.userModel.members.mem1 = this.actualusers[k].name + "_" + this.actualusers[k].rcid;
+        this.i--;
+      }
     }
+    this._enrollment.teamUpBughunt(this.userModel).subscribe(
+      data => {
+        if (data.status) {
+          this.openSnackBar('Bughunt Team Created Successfully !!!', 'OK');
+        }
+        else {
+          this.openSnackBar('Bughunt Team Creation Failure !!! ' + this.databaseError, 'OK');
+        }
+        this.onQuery(false);
+      },
+      error => {
+        this.openSnackBar(this.serverError, 'OK');
+        console.log(error);
+      }
+    );
+    this.i = 0;
+    this.done = false;
+    event.target.reset();
   }
 
   onQuery(start: boolean, refresh: boolean = false) {
@@ -188,32 +187,32 @@ export class BughuntComponent implements OnInit {
                 }
                 this.datasize = total;
                 this.sortByKey(this.users, "name");
-                this.resetPBandRefresh(start,refresh,true);
+                this.resetPBandRefresh(start, refresh, true);
                 this.openSnackBar('Bughunt Event Data Retrieved Successfully !!!', 'OK');
               }
               else {
                 this.openSnackBar('Bughunt Participants Retrieval Failure !!! ' + this.databaseError, 'OK');
                 console.log(data.data);
-                this.resetPBandRefresh(start,refresh,false);
+                this.resetPBandRefresh(start, refresh, false);
               }
             },
             error => {
               this.openSnackBar(this.serverError, 'OK');
               console.log(error);
-              this.resetPBandRefresh(start,refresh,false);
+              this.resetPBandRefresh(start, refresh, false);
             }
           );
         }
         else {
           this.openSnackBar('Bughunt Teams Retrieval Failure !!! ' + this.databaseError, 'OK');
           console.log(data.data);
-          this.resetPBandRefresh(start,refresh,false);
+          this.resetPBandRefresh(start, refresh, false);
         }
       },
       error => {
         this.openSnackBar(this.serverError, 'OK');
         console.log(error);
-        this.resetPBandRefresh(start,refresh,false);
+        this.resetPBandRefresh(start, refresh, false);
       }
     );
   }
@@ -223,7 +222,7 @@ export class BughuntComponent implements OnInit {
       this.endPB();
     if (refresh)
       this.refreshing = false;
-    if(status)
+    if (status)
       this.refreshMessage = 'Refresh';
     else
       this.refreshMessage = 'Try Refreshing Again';

@@ -77,6 +77,7 @@ export class RegistrationComponent implements OnInit {
       if (result.name) {
         this.loaded = false;
         this.startPB();
+        this.userModel.name = this.userModel.name.toUpperCase();
         this.onSubmit(work);
       }
       else

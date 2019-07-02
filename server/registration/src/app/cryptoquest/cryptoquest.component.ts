@@ -64,7 +64,7 @@ export class CryptoquestComponent implements OnInit {
         duration: 3000,
       });
   }
-  
+
   checkExistance(v: string) {
     for (let k = 0; k < this.teamNum; k++) {
       if (v == this.teams[k].members.mem1 || v == this.teams[k].members.mem2)
@@ -123,6 +123,7 @@ export class CryptoquestComponent implements OnInit {
 
   onSubmit(event: any) {
     this.startPB();
+    this.userModel.name = this.userModel.name.toUpperCase();
     for (let k = 0; k < this.datasize; k++) {
       if (this.members[k].selected && this.i == 2) {
         this.userModel.members.mem2 = this.actualusers[k].name + "_" + this.actualusers[k].rcid;
@@ -186,32 +187,32 @@ export class CryptoquestComponent implements OnInit {
                 }
                 this.datasize = total;
                 this.sortByKey(this.users, "name");
-                this.resetPBandRefresh(start,refresh,true);
-                this.openSnackBar('Cryptoquest Event Data Retrieved Successfully !!!','OK');
+                this.resetPBandRefresh(start, refresh, true);
+                this.openSnackBar('Cryptoquest Event Data Retrieved Successfully !!!', 'OK');
               }
               else {
                 this.openSnackBar('Cryptoquest Participants Retrieval Failure !!! ' + this.databaseError, 'OK');
                 console.log(data.data);
-                this.resetPBandRefresh(start,refresh,false);
+                this.resetPBandRefresh(start, refresh, false);
               }
             },
             error => {
               this.openSnackBar(this.serverError, 'OK');
               console.log(error);
-              this.resetPBandRefresh(start,refresh,false);
+              this.resetPBandRefresh(start, refresh, false);
             }
           );
         }
         else {
           this.openSnackBar('Cryptoquest Teams Retrieval Failure !!! ' + this.databaseError, 'OK');
           console.log(data.data);
-          this.resetPBandRefresh(start,refresh,false);
+          this.resetPBandRefresh(start, refresh, false);
         }
       },
       error => {
         this.openSnackBar(this.serverError, 'OK');
         console.log(error);
-        this.resetPBandRefresh(start,refresh,false);
+        this.resetPBandRefresh(start, refresh, false);
       }
     );
   }
@@ -221,7 +222,7 @@ export class CryptoquestComponent implements OnInit {
       this.endPB();
     if (refresh)
       this.refreshing = false;
-    if(status)
+    if (status)
       this.refreshMessage = 'Refresh';
     else
       this.refreshMessage = 'Try Refreshing Again';

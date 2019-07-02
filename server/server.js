@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs');
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-const uri = "mongodb://localhost/test";
+//const uri = "mongodb://localhost/test";
+const uri = "mongodb+srv://debanjan_01:debanjan@firstcluster-yy6sf.mongodb.net/test?retryWrites=true";
 mongoose.connect(uri, { useNewUrlParser: true });
 mongoose.connection.on('open', () => {
     console.log("Connected to the Data Base");
@@ -40,7 +42,10 @@ app.use('/webdesign', webdesign);
 app.use('/admin', admin);
 
 app.get('*', (req, res) => {
-    res.sendFile(__dirname + '/registration/dist/registration/index.html');
+    if(fs.existsSync(__dirname + '/registration/dist/registration/index.html'))
+        res.sendFile(__dirname + '/registration/dist/registration/index.html');
+    else
+        res.sendFile(__dirname + '/error_pages/index.html');
 });
 
 app.listen(PORT, function () {
