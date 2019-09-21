@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path');
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 //const uri = "mongodb://localhost/test";
@@ -31,7 +32,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-app.use(express.static(__dirname + '\\public'));
+app.use(express.static(path.join(__dirname,'public')));
 app.use(logRequestStart);
 
 app.use('/user', user);
@@ -42,10 +43,10 @@ app.use('/webdesign', webdesign);
 app.use('/admin', admin);
 
 app.get('*', (req, res) => {
-    if(fs.existsSync(__dirname + '/public/index.html'))
-        res.sendFile(__dirname + '/public/index.html');
+    if(fs.existsSync(path.join(__dirname,'public','index.html')))
+        res.sendFile(path.join(__dirname,'public','index.html'));
     else
-        res.sendFile(__dirname + '/error_pages/index.html');
+        res.sendFile(path.join(__dirname,'error_pages','index.html'));
 });
 
 app.listen(PORT, function () {
