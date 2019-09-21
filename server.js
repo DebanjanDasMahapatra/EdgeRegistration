@@ -26,7 +26,7 @@ const logRequestStart = (req, res, next) => {
     next();
 };
 
-const PORT = 3400;
+const PORT = server.listen(process.env.PORT || 3000);
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
